@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ type.label }}{% endblock %}
+
+{% block body %}
+    {% include 'backend/type/_card.html.twig' with { type: type, full: true } %}
+{% endblock %}
+

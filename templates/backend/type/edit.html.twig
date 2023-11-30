@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la type : {{ type.label }}{% endblock %}
+
+{% block body %}
+    <h1>Modifier la type : {{ type.label }}</h1>
+    <section class="py-3">
+        {% include('backend/type/_form.html.twig') with {'button_label': 'Modifier'} %}
+    </section>
+
+    <section class="py-3">
+        <div class="row">
+            <div class="col">
+                <a class="btn btn-secondary" href="{{ path('app.types') }}">Retour à la liste</a>
+            </div>
+        </div>
+    <section class="py-3">
+{% endblock %}

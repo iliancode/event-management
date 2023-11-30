@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une type{% endblock %}
+
+{% block body %}
+    <h1>Ajouter une type</h1>
+    <section class="py-3">
+        {% include('backend/type/_form.html.twig') %}
+    </section>
+
+    <section class="py-3">
+        <div class="row">
+            <div class="col">
+                <a class="btn btn-secondary" href="{{ path('app.types') }}">Retour à la liste</a>
+            </div>
+        </div>
+    <section class="py-3">
+{% endblock %}
