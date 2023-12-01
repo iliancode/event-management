@@ -11,7 +11,7 @@ class SecurityUtils
     public function __construct
     (
         private readonly Security $security,
-        private readonly UserPasswordHasherInterface $userPasswordHasherInterface
+        private readonly UserPasswordHasherInterface $userPasswordHasherInterface,
     )
     {
     }

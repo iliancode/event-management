@@ -5,7 +5,7 @@ namespace App\Controller\Backend;
 use App\Constants\RouteConstants;
 use App\Constants\ToastConstants;
 use App\Entity\Type;
-use App\Form\TypeType;
+use App\Form\TypeFormType;
 use App\Repository\TypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,7 +46,7 @@ class TypeController extends AbstractController
     {
         $type = new Type();
 
-        $form = $this->createForm(TypeType::class, $type);
+        $form = $this->createForm(TypeFormType::class, $type);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -76,7 +76,7 @@ class TypeController extends AbstractController
     {
         $this->checkType($type);
 
-        $form = $this->createForm(TypeType::class, $type);
+        $form = $this->createForm(TypeFormType::class, $type);
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {

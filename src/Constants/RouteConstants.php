@@ -8,6 +8,7 @@ class RouteConstants
     const ROUTE_LOGIN = 'app.login';
     const ROUTE_LOGOUT = 'app.logout';
     const ROUTE_REGISTER = 'app.register';
+    const ROUTE_VERIFY_EMAIL = 'app.verify.email';
 
     // FRONT
     const ROUTE_HOME = 'app.home';
