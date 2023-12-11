@@ -3,6 +3,7 @@
 namespace App\Controller\Security;
 
 use App\Constants\RouteConstants;
+use App\Constants\UserConstants;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
@@ -37,6 +38,8 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // set role
+            $user->setRoles([UserConstants::ROLE_USER]);
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(

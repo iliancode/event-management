@@ -1,7 +1,8 @@
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">{{ type.label }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">id : {{ type.id }}</h6>
+        <h6 class="card-subtitle mb-2 text-muted">id : {{ type.id }}
+        <p class="card-text">Participants max : {{ type.maxParticipants }}</p>
         <p class="card-text">Publiée le {{ type.createdAt|format_datetime('full', 'short') }}</p>
         <p class="card-text">Modifiée le {{ type.updatedAt|format_datetime('full', 'short') }}</p>
         <div class="d-flex gap-2">

@@ -18,6 +18,12 @@ class TypeFormType extends AbstractType
                     'placeholder' => 'Nom de la type'
                 ]
             ])
+            ->add('maxParticipants' , null, [
+                'label' => 'Nombre de participants maximum',
+                'attr' => [
+                    'placeholder' => 'Nombre de participants maximum'
+                ]
+            ])
         ;
     }
 
