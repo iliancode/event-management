@@ -41,27 +41,6 @@ class ProfileController extends AbstractController
         ]);
     }
 
-    #[Route('/create', name: RouteConstants::ROUTE_PROFILES_CREATE, methods: ['GET', 'POST'])]
-    public function create(Request $request): Response|RedirectResponse
-    {
-        $profile = new User();
-
-        $form = $this->createForm(ProfileFormType::class, $profile);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($profile);
-            $this->em->flush();
-            $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le profile a bien été créée');
-
-            return $this->redirectToRoute(RouteConstants::ROUTE_PROFILES);
-        }
-
-        return $this->render('frontend/profile/create.html.twig', [
-            'form' => $form
-        ]);
-    }
-
     #[Route('/{id}', name: RouteConstants::ROUTE_PROFILES_SHOW, methods: ['GET'])]
     public function show(?User $profile): Response
     {

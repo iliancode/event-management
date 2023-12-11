@@ -8,8 +8,10 @@
             {% if full == false %}
                 <a href="{{ path('app.profiles.show', { 'id': profile.id }) }}" class="btn btn-primary">Détails</a>
             {% endif %}
-            <a href="{{ path('app.profiles.edit', { 'id': profile.id }) }}" class="btn btn-warning">Modifier</a>
-            {% include('frontend/profile/_deleteForm.html.twig') %}
+            {% if app.user and profile == app.user or is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app.profiles.edit', { 'id': profile.id }) }}" class="btn btn-warning">Modifier</a>
+                {% include('frontend/profile/_deleteForm.html.twig') %}
+            {% endif %}
         </div>
     </div>
 </div>
