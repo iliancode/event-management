@@ -30,8 +30,13 @@ class RouteConstants
     const ROUTE_EVENTS_CREATE = 'app.events.create';
     const ROUTE_EVENTS_EDIT = 'app.events.edit';
     const ROUTE_EVENTS_DELETE = 'app.events.delete';
+    const ROUTE_EVENTS_ADD = 'app.events.add';
     const ROUTE_EVENTS_JOIN = 'app.events.join';
     const ROUTE_EVENTS_LEAVE = 'app.events.leave';
+    // Event participations
+    const ROUTE_EVENT_PARTICIPATIONS_EDIT = 'app.event_participation.edit';
+    const ROUTE_EVENT_PARTICIPATIONS_DELETE = 'app.event_participations.delete';
+    const ROUTE_EVENT_PARTICIPATIONS_BAN = 'app.event_participations.ban';
 
     // -------------- BACK ---------------
     // Types

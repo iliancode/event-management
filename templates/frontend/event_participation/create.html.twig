@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un eventParticipation{% endblock %}
+
+{% block body %}
+    <h1>Ajouter un eventParticipation</h1>
+    <section class="py-3">
+        {% include('frontend/event_participation/_form.html.twig') %}
+    </section>
+{% endblock %}

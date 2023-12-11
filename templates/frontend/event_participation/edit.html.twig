@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le eventParticipation : {{ eventParticipation.title }}{% endblock %}
+
+{% block body %}
+    <h1>Modifier le eventParticipation : {{ eventParticipation.title }}</h1>
+    <section class="py-3">
+        {% include('frontend/event_participation/_form.html.twig') with {'button_label': 'Modifier'} %}
+    </section>
+{% endblock %}

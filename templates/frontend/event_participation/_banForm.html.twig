@@ -1,0 +1,10 @@
+<form method="post"
+      action="{{ path('app.event_participations.ban', {'id': eventParticipation.id}) }}"
+      onsubmit="return confirm('Voulez-vous vraiment {{ eventParticipation.banned ? 'débannir' : 'bannir' }} cette participation ?');"
+    >
+    <input type="hidden" name="_method" value="POST">
+    <input type="hidden" name="_token" value="{{ csrf_token('ban' ~ eventParticipation.id) }}">
+    <button type="submit" class="btn btn-danger btn-xs">
+        {{ eventParticipation.banned ? 'Débannir' : 'Bannir' }}
+    </button>
+</form>

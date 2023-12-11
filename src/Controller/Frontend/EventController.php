@@ -8,6 +8,7 @@ use App\Entity\Event;
 use App\Entity\EventParticipation;
 use App\Entity\User;
 use App\Form\EventFormType;
+use App\Form\EventParticipationFormType;
 use App\Repository\EventParticipationRepository;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -47,6 +48,17 @@ class EventController extends AbstractController
         $eventParticipation = new EventParticipation();
         $eventParticipation->setEvent($event);
         $eventParticipation->setUser($user ?? $this->getUser());
+
+        $this->em->persist($eventParticipation);
+
+        $event->addEventParticipation($eventParticipation);
+    }
+
+    private function addParticipantToEvent(Event $event, String $fullname): void
+    {
+        $eventParticipation = new EventParticipation();
+        $eventParticipation->setEvent($event);
+        $eventParticipation->setFullname($fullname);
 
         $this->em->persist($eventParticipation);
 
@@ -133,6 +145,31 @@ class EventController extends AbstractController
         }
 
         return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS);
+    }
+
+    #[Route('/{id}/add', name: RouteConstants::ROUTE_EVENTS_ADD, methods: ['GET', 'POST'])]
+    public function add(Request $request, ?Event $event): Response|RedirectResponse
+    {
+        $this->checkEvent($event);
+
+        $form = $this->createForm(EventParticipationFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->addParticipantToEvent($event, $form->get('fullname')->getData());
+                $this->em->flush();
+                $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le participant a bien été ajouté');
+
+                return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $event->getId()]);
+            }
+            $this->addFlash(ToastConstants::TOAST_ERROR, 'Le participant n\'a pas pu être ajouté');
+        }
+
+        return $this->render('frontend/event_participation/create.html.twig', [
+            'form' => $form,
+            'event' => $event
+        ]);
     }
 
     #[Route('/{id}/join', name: RouteConstants::ROUTE_EVENTS_JOIN, methods: ['POST'])]
