@@ -1,0 +1,15 @@
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ event.title }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">id : {{ event.id }}
+        <p class="card-text">Publiée le {{ event.createdAt|format_datetime('full', 'short') }}</p>
+        <p class="card-text">Modifiée le {{ event.updatedAt|format_datetime('full', 'short') }}</p>
+        <div class="d-flex gap-2">
+            {% if full == false %}
+                <a href="{{ path('app.events.show', { 'id': event.id }) }}" class="btn btn-primary">Détails</a>
+            {% endif %}
+            <a href="{{ path('app.events.edit', { 'id': event.id }) }}" class="btn btn-warning">Modifier</a>
+            {% include('frontend/event/_deleteForm.html.twig') %}
+        </div>
+    </div>
+</div>

@@ -22,6 +22,12 @@ class RouteConstants
     const ROUTE_PROFILES_CREATE = 'app.profiles.create';
     const ROUTE_PROFILES_EDIT = 'app.profiles.edit';
     const ROUTE_PROFILES_DELETE = 'app.profiles.delete';
+    // Events
+    const ROUTE_EVENTS = 'app.events';
+    const ROUTE_EVENTS_SHOW = 'app.events.show';
+    const ROUTE_EVENTS_CREATE = 'app.events.create';
+    const ROUTE_EVENTS_EDIT = 'app.events.edit';
+    const ROUTE_EVENTS_DELETE = 'app.events.delete';
 
     // -------------- BACK ---------------
     // Types

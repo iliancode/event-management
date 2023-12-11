@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ event.title }}{% endblock %}
+
+{% block body %}
+    {% include 'frontend/event/_card.html.twig' with { event: event, full: true } %}
+{% endblock %}
+
