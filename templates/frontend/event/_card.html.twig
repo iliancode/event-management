@@ -8,12 +8,19 @@
             {% if full == false %}
                 <a href="{{ path('app.events.show', { 'id': event.id }) }}" class="btn btn-primary">Détails</a>
             {% endif %}
-            <a href="{{ path('app.events.edit', { 'id': event.id }) }}" class="btn btn-warning">Modifier</a>
-            {% include('frontend/event/_deleteForm.html.twig') %}
+            {% if app.user and event.organizer == app.user or is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app.events.edit', { 'id': event.id }) }}" class="btn btn-warning">Modifier</a>
+                {% include('frontend/event/_deleteForm.html.twig') %}
+            {% endif %}
         </div>
+        {% if app.user %}
         <div class="d-flex gap-2 mt-3">
-            {% include('frontend/event/_joinForm.html.twig') %}
-            {% include('frontend/event/_leaveForm.html.twig') %}
+            {% if event.inEvent(app.user) %}
+                {% include('frontend/event/_leaveForm.html.twig') %}
+            {% else %}
+                {% include('frontend/event/_joinForm.html.twig') %}
+            {% endif %}
         </div>
+        {% endif %}
     </div>
 </div>

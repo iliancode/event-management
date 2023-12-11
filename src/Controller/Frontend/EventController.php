@@ -153,7 +153,7 @@ class EventController extends AbstractController
             $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas pu rejoindre l\'évènement');
         }
 
-        return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS);
+        return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $event->getId()]);
     }
 
     #[Route('/{id}/leave', name: RouteConstants::ROUTE_EVENTS_LEAVE, methods: ['POST'])]
@@ -175,6 +175,6 @@ class EventController extends AbstractController
             $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas pu quitter l\'évènement');
         }
 
-        return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS);
+        return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $event->getId()]);
     }
 }

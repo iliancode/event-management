@@ -213,4 +213,15 @@ class Event
 
         return $this;
     }
+
+    public function isInEvent(User $user): bool
+    {
+        foreach ($this->getEventParticipations() as $eventParticipation) {
+            if ($eventParticipation->getUser() === $user) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
