@@ -11,5 +11,9 @@
             <a href="{{ path('app.events.edit', { 'id': event.id }) }}" class="btn btn-warning">Modifier</a>
             {% include('frontend/event/_deleteForm.html.twig') %}
         </div>
+        <div class="d-flex gap-2 mt-3">
+            {% include('frontend/event/_joinForm.html.twig') %}
+            {% include('frontend/event/_leaveForm.html.twig') %}
+        </div>
     </div>
 </div>

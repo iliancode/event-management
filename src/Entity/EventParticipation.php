@@ -27,7 +27,7 @@ class EventParticipation
     private ?Event $event = null;
 
     #[ORM\Column]
-    private ?bool $banned = null;
+    private ?bool $banned = false;
 
     public function getId(): ?int
     {

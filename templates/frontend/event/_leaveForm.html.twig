@@ -1,0 +1,7 @@
+<form method="post"
+      action="{{ path('app.events.leave', {'id': event.id}) }}"
+>
+    <input type="hidden" name="_method" value="POST">
+    <input type="hidden" name="_token" value="{{ csrf_token('leave' ~ event.id) }}">
+    <button type="submit" class="btn btn-danger btn-xs">Ne plus participer</button>
+</form>

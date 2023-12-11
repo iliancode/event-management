@@ -28,6 +28,8 @@ class RouteConstants
     const ROUTE_EVENTS_CREATE = 'app.events.create';
     const ROUTE_EVENTS_EDIT = 'app.events.edit';
     const ROUTE_EVENTS_DELETE = 'app.events.delete';
+    const ROUTE_EVENTS_JOIN = 'app.events.join';
+    const ROUTE_EVENTS_LEAVE = 'app.events.leave';
 
     // -------------- BACK ---------------
     // Types

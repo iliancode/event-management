@@ -5,7 +5,10 @@ namespace App\Controller\Frontend;
 use App\Constants\RouteConstants;
 use App\Constants\ToastConstants;
 use App\Entity\Event;
+use App\Entity\EventParticipation;
+use App\Entity\User;
 use App\Form\EventFormType;
+use App\Repository\EventParticipationRepository;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +23,7 @@ class EventController extends AbstractController
     public function __construct
     (
         private readonly EventRepository $eventRepository,
+        private readonly EventParticipationRepository $eventParticipationRepository,
         private readonly EntityManagerInterface $em
     )
     {
@@ -31,6 +35,22 @@ class EventController extends AbstractController
             $this->addFlash(ToastConstants::TOAST_ERROR, 'Le event n\'existe pas');
             throw $this->createNotFoundException('Le event n\'existe pas');
         }
+    }
+
+    private function isUserInEvent(Event $event, ?User $user): bool
+    {
+        return $this->eventParticipationRepository->findOneBy(['event' => $event, 'user' => $user]) instanceof EventParticipation;
+    }
+
+    private function addUserToEvent(Event $event, ?User $user = null): void
+    {
+        $eventParticipation = new EventParticipation();
+        $eventParticipation->setEvent($event);
+        $eventParticipation->setUser($user ?? $this->getUser());
+
+        $this->em->persist($eventParticipation);
+
+        $event->addEventParticipation($eventParticipation);
     }
 
     #[Route('', name: RouteConstants::ROUTE_EVENTS, methods: ['GET'])]
@@ -51,9 +71,11 @@ class EventController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $event->setOrganizer($this->getUser());
+            $this->addUserToEvent($event, $this->getUser());
 
             $this->em->persist($event);
             $this->em->flush();
+
             $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le event a bien été créée');
 
             return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS);
@@ -69,7 +91,7 @@ class EventController extends AbstractController
     {
         $this->checkEvent($event);
         return $this->render('frontend/event/show.html.twig', [
-            'event' => $event
+            'event' => $event,
         ]);
     }
 
@@ -108,6 +130,49 @@ class EventController extends AbstractController
             $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le event a bien été supprimée');
         } else {
             $this->addFlash(ToastConstants::TOAST_ERROR, 'Le event n\'a pas pu être supprimée');
+        }
+
+        return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS);
+    }
+
+    #[Route('/{id}/join', name: RouteConstants::ROUTE_EVENTS_JOIN, methods: ['POST'])]
+    public function join(Request $request, ?Event $event): Response|RedirectResponse
+    {
+        $this->checkEvent($event);
+
+        if ($this->isCsrfTokenValid('join' . $event->getId(), $request->request->get('_token'))) {
+            if ($this->isUserInEvent($event, $this->getUser())) {
+                $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous avez déjà rejoint l\'évènement');
+                return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS);
+            }
+            $this->addUserToEvent($event, $this->getUser());
+            $this->em->flush();
+
+            $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Vous avez bien rejoint l\'évènement');
+        } else {
+            $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas pu rejoindre l\'évènement');
+        }
+
+        return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS);
+    }
+
+    #[Route('/{id}/leave', name: RouteConstants::ROUTE_EVENTS_LEAVE, methods: ['POST'])]
+    public function leave(Request $request, ?Event $event): Response|RedirectResponse
+    {
+        $this->checkEvent($event);
+
+        if ($this->isCsrfTokenValid('leave' . $event->getId(), $request->request->get('_token'))) {
+            if (!$this->isUserInEvent($event, $this->getUser())) {
+                $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas rejoint l\'évènement');
+                return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS);
+            }
+            $eventParticipation = $this->eventParticipationRepository->findOneBy(['event' => $event, 'user' => $this->getUser()]);
+            $event->removeEventParticipation($eventParticipation);
+            $this->em->remove($eventParticipation);
+            $this->em->flush();
+            $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Vous avez bien quitté l\'évènement');
+        } else {
+            $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas pu quitter l\'évènement');
         }
 
         return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS);

@@ -1,0 +1,7 @@
+<form method="post"
+      action="{{ path('app.events.join', {'id': event.id}) }}"
+>
+    <input type="hidden" name="_method" value="POST">
+    <input type="hidden" name="_token" value="{{ csrf_token('join' ~ event.id) }}">
+    <button type="submit" class="btn btn-secondary btn-xs">Participer</button>
+</form>

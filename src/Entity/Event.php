@@ -41,7 +41,7 @@ class Event
     private ?string $location = null;
 
     #[ORM\Column]
-    private ?bool $drafted = null;
+    private ?bool $drafted = false;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[ORM\JoinColumn(nullable: false)]
