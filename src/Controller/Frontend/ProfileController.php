@@ -5,6 +5,7 @@ namespace App\Controller\Frontend;
 use App\Constants\RouteConstants;
 use App\Constants\ToastConstants;
 use App\Entity\User;
+use App\Form\ProfileEmailFormType;
 use App\Form\ProfileFormType;
 use App\Form\ProfilePasswordFormType;
 use App\Repository\UserRepository;
@@ -76,6 +77,33 @@ class ProfileController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/edit-email', name: RouteConstants::ROUTE_PROFILES_EDIT_EMAIL, methods: ['GET', 'POST'])]
+    public function editEmail(Request $request, ?User $profile): Response|RedirectResponse
+    {
+        $this->checkUser($profile);
+
+        $form = $this->createForm(ProfileEmailFormType::class, $profile);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                // check if old password is valid
+                if (!$profile->isPasswordValid($form->get('oldPassword')->getData())) {
+                    $this->addFlash(ToastConstants::TOAST_ERROR, 'L\'ancien mot de passe est incorrect');
+                    return $this->redirectToRoute(RouteConstants::ROUTE_PROFILES_EDIT_EMAIL, ['id' => $profile->getId()]);
+                }
+                $this->em->flush();
+                $this->addFlash(ToastConstants::TOAST_SUCCESS, 'L\'email a bien été modifiée');
+
+                return $this->redirectToRoute(RouteConstants::ROUTE_PROFILES);
+            }
+        }
+
+        return $this->render('frontend/profile/edit_email.html.twig', [
+            'form' => $form,
+            'profile' => $profile
+        ]);
+    }
 
     #[Route('/{id}/edit-password', name: RouteConstants::ROUTE_PROFILES_EDIT_PASSWORD, methods: ['GET', 'POST'])]
     public function editPassword(Request $request, ?User $profile, UserPasswordHasherInterface $userPasswordHasher): Response|RedirectResponse

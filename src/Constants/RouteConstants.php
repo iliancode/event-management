@@ -21,6 +21,7 @@ class RouteConstants
     const ROUTE_PROFILES_SHOW = 'app.profiles.show';
     const ROUTE_PROFILES_EDIT = 'app.profiles.edit';
     const ROUTE_PROFILES_DELETE = 'app.profiles.delete';
+    const ROUTE_PROFILES_EDIT_EMAIL = 'app.profiles.edit.email';
     const ROUTE_PROFILES_EDIT_PASSWORD = 'app.profiles.edit.password';
     // Events
     const ROUTE_EVENTS = 'app.events';
