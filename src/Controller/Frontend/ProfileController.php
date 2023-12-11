@@ -6,12 +6,14 @@ use App\Constants\RouteConstants;
 use App\Constants\ToastConstants;
 use App\Entity\User;
 use App\Form\ProfileFormType;
+use App\Form\ProfilePasswordFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/profiles')]
@@ -69,6 +71,43 @@ class ProfileController extends AbstractController
         }
 
         return $this->render('frontend/profile/edit.html.twig', [
+            'form' => $form,
+            'profile' => $profile
+        ]);
+    }
+
+
+    #[Route('/{id}/edit-password', name: RouteConstants::ROUTE_PROFILES_EDIT_PASSWORD, methods: ['GET', 'POST'])]
+    public function editPassword(Request $request, ?User $profile, UserPasswordHasherInterface $userPasswordHasher): Response|RedirectResponse
+    {
+        $this->checkUser($profile);
+
+        $form = $this->createForm(ProfilePasswordFormType::class, $profile);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                // check if old password is valid
+                if (!$profile->isPasswordValid($form->get('oldPassword')->getData())) {
+                    $this->addFlash(ToastConstants::TOAST_ERROR, 'L\'ancien mot de passe est incorrect');
+                    return $this->redirectToRoute(RouteConstants::ROUTE_PROFILES_EDIT_PASSWORD, ['id' => $profile->getId()]);
+                }
+                // encode the plain password
+                $profile->setPassword(
+                    $userPasswordHasher->hashPassword(
+                        $profile,
+                        $form->get('plainPassword')->getData()
+                    )
+                );
+
+                $this->em->flush();
+                $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le mot de passe a bien été modifiée');
+
+                return $this->redirectToRoute(RouteConstants::ROUTE_PROFILES);
+            }
+        }
+
+        return $this->render('frontend/profile/edit_password.html.twig', [
             'form' => $form,
             'profile' => $profile
         ]);

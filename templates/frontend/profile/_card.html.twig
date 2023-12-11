@@ -10,6 +10,7 @@
             {% endif %}
             {% if app.user and profile == app.user or is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('app.profiles.edit', { 'id': profile.id }) }}" class="btn btn-warning">Modifier</a>
+                <a href="{{ path('app.profiles.edit.password', { 'id': profile.id }) }}" class="btn btn-warning">Modifier mot de passe</a>
                 {% include('frontend/profile/_deleteForm.html.twig') %}
             {% endif %}
         </div>
