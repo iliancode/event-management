@@ -23,6 +23,7 @@ class RouteConstants
     const ROUTE_PROFILES_DELETE = 'app.profiles.delete';
     const ROUTE_PROFILES_EDIT_EMAIL = 'app.profiles.edit.email';
     const ROUTE_PROFILES_EDIT_PASSWORD = 'app.profiles.edit.password';
+    const ROUTE_PROFILES_BAN = 'app.profiles.ban';
     // Events
     const ROUTE_EVENTS = 'app.events';
     const ROUTE_EVENTS_SHOW = 'app.events.show';

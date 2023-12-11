@@ -13,6 +13,9 @@
                 <a href="{{ path('app.profiles.edit.email', { 'id': profile.id }) }}" class="btn btn-warning">Modifier email</a>
                 <a href="{{ path('app.profiles.edit.password', { 'id': profile.id }) }}" class="btn btn-warning">Modifier mot de passe</a>
                 {% include('frontend/profile/_deleteForm.html.twig') %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    {% include('frontend/profile/_banForm.html.twig') %}
+                {% endif %}
             {% endif %}
         </div>
     </div>

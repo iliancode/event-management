@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/profiles')]
 class ProfileController extends AbstractController
@@ -152,6 +153,25 @@ class ProfileController extends AbstractController
             $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le profile a bien été supprimée');
         } else {
             $this->addFlash(ToastConstants::TOAST_ERROR, 'Le profile n\'a pas pu être supprimée');
+        }
+
+        return $this->redirectToRoute(RouteConstants::ROUTE_PROFILES);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/{id}/ban', name: RouteConstants::ROUTE_PROFILES_BAN, methods: ['GET', 'POST'])]
+    public function ban(Request $request, ?User $profile): Response|RedirectResponse
+    {
+        $this->checkUser($profile);
+
+        if ($this->isCsrfTokenValid('ban' . $profile->getId(), $request->request->get('_token'))) {
+            $banned = $profile->isBanned();
+            $profile->setIsBanned(!$banned);
+            $this->em->flush();
+            $message = $banned ? 'Le profile a bien été débanni' : 'Le profile a bien été banni';
+            $this->addFlash(ToastConstants::TOAST_SUCCESS, $message);
+        } else {
+            $this->addFlash(ToastConstants::TOAST_ERROR, 'Le profile n\'a pas pu être banni');
         }
 
         return $this->redirectToRoute(RouteConstants::ROUTE_PROFILES);
