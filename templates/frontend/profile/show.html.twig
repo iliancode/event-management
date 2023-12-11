@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ profile.username }}{% endblock %}
+
+{% block body %}
+    {% include 'frontend/profile/_card.html.twig' with { profile: profile, full: true } %}
+{% endblock %}
+

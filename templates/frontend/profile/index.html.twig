@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les profiles{% endblock %}
+
+{% block body %}
+    <h1>Les profiles ({{ profiles|length }})</h1>
+    <section class="py-3">
+        <div class="row">
+            <div class="col">
+                <a class="btn btn-secondary" href="{{ path('app.profiles.create') }}">Ajouter une profile</a>
+            </div>
+        </div>
+    </section>
+    <section class="py-3">
+        {% include 'frontend/profile/_list.html.twig' with { profiles: profiles } %}
+    </section>
+{% endblock %}
