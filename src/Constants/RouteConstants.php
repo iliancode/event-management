@@ -9,6 +9,9 @@ class RouteConstants
     const ROUTE_LOGOUT = 'app.logout';
     const ROUTE_REGISTER = 'app.register';
     const ROUTE_VERIFY_EMAIL = 'app.verify.email';
+    const ROUTE_FORGOT_PASSWORD_REQUEST = 'app.forgot.password.request';
+    const ROUTE_CHECK_EMAIL = 'app.check.email';
+    const ROUTE_RESET_PASSWORD = 'app.reset.password';
 
     // FRONT
     const ROUTE_HOME = 'app.home';

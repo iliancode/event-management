@@ -62,7 +62,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->events = new ArrayCollection();
-        $this->eventParticipants = new ArrayCollection();
         $this->eventParticipations = new ArrayCollection();
     }
 
