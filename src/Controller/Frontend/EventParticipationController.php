@@ -46,12 +46,12 @@ class EventParticipationController extends AbstractController
                 $this->em->flush();
                 $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le eventParticipation a bien été modifiée');
 
-                return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS);
+                return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $eventParticipation->getEvent()->getId()]);
             }
             $this->addFlash(ToastConstants::TOAST_ERROR, 'Le eventParticipation n\'a pas pu être modifiée');
         }
 
-        return $this->render('frontend/eventParticipation/edit.html.twig', [
+        return $this->render('frontend/event_participation/edit.html.twig', [
             'form' => $form,
             'eventParticipation' => $eventParticipation
         ]);

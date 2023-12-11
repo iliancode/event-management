@@ -214,6 +214,28 @@ class Event
         return $this;
     }
 
+    public function getNbRealParticipants(): int
+    {
+        $nbRealParticipants = 0;
+        foreach ($this->getEventParticipations() as $eventParticipation) {
+            if (!$eventParticipation->isBanned()) {
+                $nbRealParticipants++;
+            }
+        }
+
+        return $nbRealParticipants;
+    }
+
+    public function getMaxParticipants(): int
+    {
+        return $this->getType()->getMaxParticipants();
+    }
+
+    public function isMaxParticipantsReached(): bool
+    {
+        return $this->getNbRealParticipants() >= $this->getType()->getMaxParticipants();
+    }
+
     public function isInEvent(User $user): bool
     {
         foreach ($this->getEventParticipations() as $eventParticipation) {
@@ -223,5 +245,21 @@ class Event
         }
 
         return false;
+    }
+
+    public function isBannedFromEvent(User $user): bool
+    {
+        foreach ($this->getEventParticipations() as $eventParticipation) {
+            if ($eventParticipation->getUser() === $user && $eventParticipation->isBanned()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isPassed(): bool
+    {
+        return $this->getDate() < new \DateTime();
     }
 }

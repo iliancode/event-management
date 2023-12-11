@@ -9,6 +9,7 @@ use App\Form\ProfileEmailFormType;
 use App\Form\ProfileFormType;
 use App\Form\ProfilePasswordFormType;
 use App\Repository\UserRepository;
+use App\Utils\SecurityUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -24,7 +25,8 @@ class ProfileController extends AbstractController
     public function __construct
     (
         private readonly UserRepository $profileRepository,
-        private readonly EntityManagerInterface $em
+        private readonly EntityManagerInterface $em,
+        private readonly SecurityUtils $securityUtils
     )
     {
     }
@@ -93,6 +95,12 @@ class ProfileController extends AbstractController
                     $this->addFlash(ToastConstants::TOAST_ERROR, 'L\'ancien mot de passe est incorrect');
                     return $this->redirectToRoute(RouteConstants::ROUTE_PROFILES_EDIT_EMAIL, ['id' => $profile->getId()]);
                 }
+                // set verified to false
+                $profile->setIsVerified(false);
+
+                // send email confirmation
+                $this->securityUtils->sendEmailConfirmation($profile);
+
                 $this->em->flush();
                 $this->addFlash(ToastConstants::TOAST_SUCCESS, 'L\'email a bien été modifiée');
 
@@ -140,6 +148,18 @@ class ProfileController extends AbstractController
             'form' => $form,
             'profile' => $profile
         ]);
+    }
+
+    #[Route('/{id}/verify-email', name: RouteConstants::ROUTE_PROFILES_VERIFY_EMAIL, methods: ['GET'])]
+    public function verifyEmail(Request $request, ?User $profile): Response|RedirectResponse
+    {
+        $this->checkUser($profile);
+
+        $this->securityUtils->sendEmailConfirmation($profile);
+
+        $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Un email de vérification a été envoyé');
+
+        return $this->redirectToRoute(RouteConstants::ROUTE_PROFILES_SHOW, ['id' => $profile->getId()]);
     }
 
     #[Route('/{id}', name: RouteConstants::ROUTE_PROFILES_DELETE, methods: ['POST'])]

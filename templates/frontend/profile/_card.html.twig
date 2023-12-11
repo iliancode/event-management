@@ -1,6 +1,12 @@
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">{{ profile.username }}</h5>
+        {% if profile.banned %}
+            <span class="badge bg-danger">Banni</span>
+        {% endif %}
+        {% if profile.verified %}
+            <span class="badge bg-success">Vérifié</span>
+        {% endif %}
         <h6 class="card-subtitle mb-2 text-muted">id : {{ profile.id }}
         <p class="card-text">Publiée le {{ profile.createdAt|format_datetime('full', 'short') }}</p>
         <p class="card-text">Modifiée le {{ profile.updatedAt|format_datetime('full', 'short') }}</p>
@@ -10,6 +16,9 @@
             {% endif %}
             {% if app.user and profile == app.user or is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('app.profiles.edit', { 'id': profile.id }) }}" class="btn btn-warning">Modifier</a>
+                {%  if profile.verified == false %}
+                    <a href="{{ path('app.profiles.verify.email', { 'id': profile.id }) }}" class="btn btn-success">Envoyer un email de vérification</a>
+                {% endif %}
                 <a href="{{ path('app.profiles.edit.email', { 'id': profile.id }) }}" class="btn btn-warning">Modifier email</a>
                 <a href="{{ path('app.profiles.edit.password', { 'id': profile.id }) }}" class="btn btn-warning">Modifier mot de passe</a>
                 {% include('frontend/profile/_deleteForm.html.twig') %}

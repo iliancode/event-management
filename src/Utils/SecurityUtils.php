@@ -2,8 +2,12 @@
 
 namespace App\Utils;
 
+use App\Constants\RouteConstants;
 use App\Constants\UserConstants;
+use App\Security\EmailVerifier;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class SecurityUtils
@@ -12,6 +16,7 @@ class SecurityUtils
     (
         private readonly Security $security,
         private readonly UserPasswordHasherInterface $userPasswordHasherInterface,
+        private readonly EmailVerifier $emailVerifier
     )
     {
     }
@@ -54,5 +59,16 @@ class SecurityUtils
     public function encodePassword($user, $password): string
     {
         return $this->userPasswordHasherInterface->hashPassword($user, $password);
+    }
+
+    public function sendEmailConfirmation($user): void
+    {
+        $this->emailVerifier->sendEmailConfirmation(RouteConstants::ROUTE_VERIFY_EMAIL, $user,
+            (new TemplatedEmail())
+                ->from(new Address('noreply@esi-events.fr', 'ESGI EVENTS'))
+                ->to($user->getEmail())
+                ->subject('Please Confirm your Email')
+                ->htmlTemplate('security/confirmation_email.html.twig')
+        );
     }
 }

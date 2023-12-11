@@ -157,6 +157,11 @@ class EventController extends AbstractController
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
+                if ($event->isMaxParticipantsReached()) {
+                    $this->addFlash(ToastConstants::TOAST_ERROR, 'Le nombre maximum de participants est atteint');
+                    return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $event->getId()]);
+                }
+
                 $this->addParticipantToEvent($event, $form->get('fullname')->getData());
                 $this->em->flush();
                 $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le participant a bien été ajouté');
@@ -180,7 +185,11 @@ class EventController extends AbstractController
         if ($this->isCsrfTokenValid('join' . $event->getId(), $request->request->get('_token'))) {
             if ($this->isUserInEvent($event, $this->getUser())) {
                 $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous avez déjà rejoint l\'évènement');
-                return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS);
+                return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $event->getId()]);
+            }
+            if ($event->isMaxParticipantsReached()) {
+                $this->addFlash(ToastConstants::TOAST_ERROR, 'Le nombre maximum de participants est atteint');
+                return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $event->getId()]);
             }
             $this->addUserToEvent($event, $this->getUser());
             $this->em->flush();
@@ -201,7 +210,7 @@ class EventController extends AbstractController
         if ($this->isCsrfTokenValid('leave' . $event->getId(), $request->request->get('_token'))) {
             if (!$this->isUserInEvent($event, $this->getUser())) {
                 $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas rejoint l\'évènement');
-                return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS);
+                return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $event->getId()]);
             }
             $eventParticipation = $this->eventParticipationRepository->findOneBy(['event' => $event, 'user' => $this->getUser()]);
             $event->removeEventParticipation($eventParticipation);

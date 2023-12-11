@@ -1,6 +1,15 @@
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">{{ event.title }}</h5>
+        {% if event.drafted %}
+            <span class="badge bg-secondary">Brouillon</span>
+        {% endif %}
+        {% if event.isPassed %}
+            <span class="badge bg-danger">Passé</span>
+        {% else%}
+            <span class="badge bg-warning">A venir</span>
+        {% endif %}
+        <span class="badge bg-primary">{{ event.type.label }}</span>
         <h6 class="card-subtitle mb-2 text-muted">id : {{ event.id }}
         <p class="card-text">Publiée le {{ event.createdAt|format_datetime('full', 'short') }}</p>
         <p class="card-text">Modifiée le {{ event.updatedAt|format_datetime('full', 'short') }}</p>
@@ -12,15 +21,29 @@
                 <a href="{{ path('app.events.edit', { 'id': event.id }) }}" class="btn btn-warning">Modifier</a>
                 {% include('frontend/event/_deleteForm.html.twig') %}
             {% endif %}
-        </div>
-        {% if app.user %}
-        <div class="d-flex gap-2 mt-3">
-            {% if event.inEvent(app.user) %}
-                {% include('frontend/event/_leaveForm.html.twig') %}
-            {% else %}
-                {% include('frontend/event/_joinForm.html.twig') %}
+            {% if (app.user == event.organizer or is_granted('ROLE_ADMIN')) and event.maxParticipantsReached() == false and event.isPassed == false %}
+                <a class="btn btn-secondary" href="{{ path('app.events.add', { id: event.id }) }}">Ajouter un participant non inscrit</a>
             {% endif %}
         </div>
+        {% if app.user %}
+            {% if  event.isBannedFromEvent(app.user) == false %}
+                <div class="d-flex gap-2 mt-3">
+                    {% if event.inEvent(app.user) %}
+                        {% include('frontend/event/_leaveForm.html.twig') %}
+                    {% elseif event.maxParticipantsReached() == false and event.isPassed == false %}
+                        {% include('frontend/event/_joinForm.html.twig') %}
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if  event.isBannedFromEvent(app.user) %}
+                <p class="text-danger">Vous avez été banni de cet événement</p>
+            {% endif %}
+        {% endif %}
+        {% if event.maxParticipantsReached() and event.isPassed == false %}
+            <p class="text-danger">Cet événement est complet</p>
+        {% endif %}
+        {% if event.isPassed %}
+            <p class="text-danger">Cet événement est passé</p>
         {% endif %}
     </div>
 </div>

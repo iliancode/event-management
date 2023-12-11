@@ -3,12 +3,14 @@
 namespace App\Controller\Security;
 
 use App\Constants\RouteConstants;
+use App\Constants\ToastConstants;
 use App\Constants\UserConstants;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
+use App\Utils\SecurityUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,7 +27,11 @@ class RegistrationController extends AbstractController
 {
     private EmailVerifier $emailVerifier;
 
-    public function __construct(EmailVerifier $emailVerifier)
+    public function __construct
+    (
+        EmailVerifier $emailVerifier,
+        private readonly SecurityUtils $securityUtils
+    )
     {
         $this->emailVerifier = $emailVerifier;
     }
@@ -52,14 +58,7 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation(RouteConstants::ROUTE_VERIFY_EMAIL, $user,
-                (new TemplatedEmail())
-                    ->from(new Address('noreply@esi-events.fr', 'ESGI EVENTS'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('security/confirmation_email.html.twig')
-            );
-            // do anything else you need here, like send an email
+            $this->securityUtils->sendEmailConfirmation($user);
 
             return $userAuthenticator->authenticateUser(
                 $user,
@@ -97,8 +96,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute(RouteConstants::ROUTE_REGISTER);
         }
 
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Your email address has been verified.');
+        $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Votre email a bien été vérifié.');
 
         return $this->redirectToRoute(RouteConstants::ROUTE_HOME);
     }

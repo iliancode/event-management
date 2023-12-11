@@ -14,6 +14,9 @@
             {%  if eventParticipation.user != null %}
                 {% include('frontend/event_participation/_banForm.html.twig') %}
             {% endif %}
+            {% if eventParticipation.fullname != null %}
+                <a href="{{ path('app.event_participation.edit', { 'id': eventParticipation.id }) }}" class="btn btn-primary">Edit</a>
+            {% endif %}
             {% include('frontend/event_participation/_deleteForm.html.twig') %}
         {% endif %}
     </div>
