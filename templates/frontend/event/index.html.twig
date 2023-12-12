@@ -3,7 +3,7 @@
 {% block title %}Les events{% endblock %}
 
 {% block body %}
-    <h1>Les events ({{ events|length }})</h1>
+    <h1>Les events ({{ events.totalItemCount }})</h1>
     {% if is_granted('ROLE_EDITOR') %}
         <section class="py-3">
             <div class="row">

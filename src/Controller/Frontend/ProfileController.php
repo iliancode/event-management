@@ -11,6 +11,7 @@ use App\Form\ProfilePasswordFormType;
 use App\Repository\UserRepository;
 use App\Utils\SecurityUtils;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +27,8 @@ class ProfileController extends AbstractController
     (
         private readonly UserRepository $profileRepository,
         private readonly EntityManagerInterface $em,
-        private readonly SecurityUtils $securityUtils
+        private readonly SecurityUtils $securityUtils,
+        private readonly PaginatorInterface $paginator
     )
     {
     }
@@ -40,10 +42,20 @@ class ProfileController extends AbstractController
     }
 
     #[Route('', name: RouteConstants::ROUTE_PROFILES, methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $items = $this->profileRepository->findAll();
+        $page = $request->query->getInt('page', 1) < 1 ? 1 : $request->query->getInt('page', 1);
+        $limit = $request->query->getInt('limit', 10) < 1 ? 10 : $request->query->getInt('limit', 10);
+
+        $profiles= $this->paginator->paginate(
+            $items,
+            $page,
+            $limit
+        );
+
         return $this->render('frontend/profile/index.html.twig', [
-            'profiles' => $this->profileRepository->findAll(),
+            'profiles' => $profiles,
         ]);
     }
 

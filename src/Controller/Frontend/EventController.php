@@ -12,6 +12,7 @@ use App\Form\EventParticipationFormType;
 use App\Repository\EventParticipationRepository;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +26,8 @@ class EventController extends AbstractController
     (
         private readonly EventRepository $eventRepository,
         private readonly EventParticipationRepository $eventParticipationRepository,
-        private readonly EntityManagerInterface $em
+        private readonly EntityManagerInterface $em,
+        private readonly PaginatorInterface $paginator
     )
     {
     }
@@ -66,10 +68,20 @@ class EventController extends AbstractController
     }
 
     #[Route('', name: RouteConstants::ROUTE_EVENTS, methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $items = $this->eventRepository->findAll();
+        $page = $request->query->getInt('page', 1) < 1 ? 1 : $request->query->getInt('page', 1);
+        $limit = $request->query->getInt('limit', 10) < 1 ? 10 : $request->query->getInt('limit', 10);
+
+        $events = $this->paginator->paginate(
+            $items,
+            $page,
+            $limit
+        );
+
         return $this->render('frontend/event/index.html.twig', [
-            'events' => $this->eventRepository->findAll(),
+            'events' => $events,
         ]);
     }
 

@@ -3,7 +3,7 @@
 {% block title %}Les profiles{% endblock %}
 
 {% block body %}
-    <h1>Les profiles ({{ profiles|length }})</h1>
+    <h1>Les profiles ({{ profiles.totalItemCount  }})</h1>
     <section class="py-3">
         {% include 'frontend/profile/_list.html.twig' with { profiles: profiles } %}
     </section>

@@ -8,6 +8,7 @@ use App\Entity\Type;
 use App\Form\TypeFormType;
 use App\Repository\TypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,8 @@ class TypeController extends AbstractController
     public function __construct
     (
         private readonly TypeRepository $typeRepository,
-        private readonly EntityManagerInterface $em
+        private readonly EntityManagerInterface $em,
+        private readonly PaginatorInterface $paginator
     )
     {
     }
@@ -34,10 +36,20 @@ class TypeController extends AbstractController
     }
 
     #[Route('', name: RouteConstants::ROUTE_TYPES, methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $items = $this->typeRepository->findAll();
+        $page = $request->query->getInt('page', 1) < 1 ? 1 : $request->query->getInt('page', 1);
+        $limit = $request->query->getInt('limit', 10) < 1 ? 10 : $request->query->getInt('limit', 10);
+
+        $types = $this->paginator->paginate(
+            $items,
+            $page,
+            $limit
+        );
+
         return $this->render('backend/type/index.html.twig', [
-            'types' => $this->typeRepository->findAll(),
+            'types' => $types,
         ]);
     }
 
