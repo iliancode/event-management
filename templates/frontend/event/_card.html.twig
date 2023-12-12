@@ -46,8 +46,10 @@
                 <p class="text-danger">Vous avez été banni de cet événement</p>
             {% endif %}
         {% endif %}
-        {% if event.maxParticipantsReached() and event.isPassed == false %}
+        {% if event.maxParticipantsReached() %}
             <p class="text-danger">Cet événement est complet</p>
+        {% elseif event.isPassed == false %}
+            <p class="text-success">Il reste {{ event.getRemainingPlaces }} places</p>
         {% endif %}
         {% if event.isPassed %}
             <p class="text-danger">Cet événement est passé</p>

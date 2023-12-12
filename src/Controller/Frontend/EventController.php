@@ -71,20 +71,42 @@ class EventController extends AbstractController
     #[Route('', name: RouteConstants::ROUTE_EVENTS, methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $items = $this->eventRepository->findAll();
         $page = $request->query->getInt('page', 1) < 1 ? 1 : $request->query->getInt('page', 1);
         $limit = $request->query->getInt('limit', 10) < 1 ? 10 : $request->query->getInt('limit', 10);
 
         // Handle the form submission
         $filters = $this->createForm(EventFilterFormType::class, [
-            'search' => $request->query->get('search')
+            'search' => $request->query->get('search'),
+            'order' => $request->query->get('order') ?? 'createdAt',
+            'direction' => $request->query->get('direction') ?? 'DESC'
         ]);
         $filters->handleRequest($request);
 
-        if ($filters->get('search')->getData()) {
-            $items = $this->eventRepository->findBy([
-                'title' => $filters->get('search')->getData()
-            ]);
+        $requestFilters = [
+            'search' => $filters->get('search')->getData(),
+            'types' => $filters->get('types')->getData(),
+            'state' => $filters->get('state')->getData(),
+            'dateStart' => $filters->get('dateStart')->getData(),
+            'dateEnd' => $filters->get('dateEnd')->getData(),
+            'order' => $filters->get('order')->getData() ?? 'createdAt',
+            'direction' => $filters->get('direction')->getData() ?? 'DESC'
+        ];
+        $items = $this->eventRepository->findByFilters($requestFilters);
+
+        // Get the available events
+        $available = $filters->get('available')->getData();
+        if ($available && count($available) > 0) {
+            if (count($available) === 1 && $available[0] === true)
+            {
+                $items = array_filter($items, function ($item) {
+                    return $item->isMaxParticipantsReached() === false && $item->isPassed() === false;
+                });
+            }
+            else if (count($available) === 1 && $available[0] === false) {
+                $items = array_filter($items, function ($item) {
+                    return $item->isMaxParticipantsReached() === true;
+                });
+            }
         }
 
         $events = $this->paginator->paginate(

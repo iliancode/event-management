@@ -298,6 +298,11 @@ class Event
         return $this->getNbRealParticipants() >= $this->getType()->getMaxParticipants();
     }
 
+    public function getRemainingPlaces(): int
+    {
+        return $this->getType()->getMaxParticipants() - $this->getNbRealParticipants();
+    }
+
     public function isInEvent(User $user): bool
     {
         foreach ($this->getEventParticipations() as $eventParticipation) {
