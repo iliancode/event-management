@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -37,6 +38,84 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword($newHashedPassword);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
+    }
+
+    public function findByFilters($filters): array
+    {
+        $queryBuilder = $this->createQueryBuilder('u');
+
+        foreach ($filters as $filterName => $filterValue) {
+            switch ($filterName) {
+                case 'search':
+                    if ($filterValue) {
+                        $queryBuilder = $this->findBySearch($queryBuilder, $filterValue);
+                    }
+                    break;
+                case 'roles':
+                    if ($filterValue) {
+                        $queryBuilder = $this->findByRoles($queryBuilder, $filterValue);
+                    }
+                    break;
+                case 'verified':
+                    if ($filterValue) {
+                        $queryBuilder = $this->findByVerified($queryBuilder, $filterValue);
+                    }
+                    break;
+                case 'banned':
+                    if ($filterValue) {
+                        $queryBuilder = $this->findByBanned($queryBuilder, $filterValue);
+                    }
+                    break;
+                case 'order':
+                    if ($filterValue) {
+                        $queryBuilder = $queryBuilder
+                            ->orderBy('u.' . $filterValue, $filters['direction']);
+                    }
+                    break;
+            }
+        }
+        return $queryBuilder
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    private function findBySearch(QueryBuilder $queryBuilder, String $search): QueryBuilder
+    {
+        return $queryBuilder
+                ->andWhere('u.username LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+    }
+
+    private function findByRoles(QueryBuilder $queryBuilder, array $roles): QueryBuilder
+    {
+        $orX = $queryBuilder->expr()->orX();
+        foreach ($roles as $role) {
+            $orX->add($queryBuilder->expr()->like('u.roles', ':role_' . $role));
+            $queryBuilder->setParameter('role_' . $role, '%"'.$role.'"%');
+        }
+        return $queryBuilder
+            ->andWhere($orX);
+    }
+
+    private function findByVerified(QueryBuilder $queryBuilder, array $verifieds): QueryBuilder
+    {
+        if (count($verifieds) === 2) {
+            return $queryBuilder;
+        }
+        return $queryBuilder
+            ->andWhere('u.verified = :verified')
+            ->setParameter('verified', $verifieds[0]);
+    }
+
+    private function findByBanned(QueryBuilder $queryBuilder, array $banneds): QueryBuilder
+    {
+        if (count($banneds) === 2) {
+            return $queryBuilder;
+        }
+        return $queryBuilder
+            ->andWhere('u.banned = :banned')
+            ->setParameter('banned', $banneds[0]);
     }
 
 //    /**

@@ -45,21 +45,26 @@ class ProfileController extends AbstractController
     #[Route('', name: RouteConstants::ROUTE_PROFILES, methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $items = $this->profileRepository->findAll();
         $page = $request->query->getInt('page', 1) < 1 ? 1 : $request->query->getInt('page', 1);
         $limit = $request->query->getInt('limit', 10) < 1 ? 10 : $request->query->getInt('limit', 10);
 
         // Handle the form submission
         $filters = $this->createForm(ProfileFilterFormType::class, [
-            'search' => $request->query->get('search')
+            'search' => $request->query->get('search'),
+            'order' => $request->query->get('order') ?? 'createdAt',
+            'direction' => $request->query->get('direction') ?? 'DESC'
         ]);
         $filters->handleRequest($request);
 
-        if ($filters->get('search')->getData()) {
-            $items = $this->profileRepository->findBy([
-                'username' => $filters->get('search')->getData()
-            ]);
-        }
+        $requestFilters = [
+            'search' => $filters->get('search')->getData(),
+            'roles' => $filters->get('roles')->getData(),
+            'verified' => $filters->get('verified')->getData(),
+            'banned' => $filters->get('banned')->getData(),
+            'order' => $filters->get('order')->getData() ?? 'createdAt',
+            'direction' => $filters->get('direction')->getData() ?? 'DESC'
+        ];
+        $items = $this->profileRepository->findByFilters($requestFilters);
 
         $profiles= $this->paginator->paginate(
             $items,
