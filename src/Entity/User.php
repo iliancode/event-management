@@ -333,4 +333,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return password_verify($password, $this->password);
     }
+
+    public function getNbOrganizedEvents(): int
+    {
+        return $this->events->count();
+    }
+
+
+    public function getNbParticipatedEvents(): int
+    {
+        $participations = $this->eventParticipations->filter(function (EventParticipation $eventParticipation) {
+            return !$eventParticipation->isBanned();
+        });
+
+        return $participations->count();
+    }
 }

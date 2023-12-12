@@ -43,9 +43,6 @@ class Event
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $location = null;
 
-    #[ORM\Column]
-    private ?bool $drafted = false;
-
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $organizer = null;
@@ -156,18 +153,6 @@ class Event
     public function setLocation(?string $location): static
     {
         $this->location = $location;
-
-        return $this;
-    }
-
-    public function isDrafted(): ?bool
-    {
-        return $this->drafted;
-    }
-
-    public function setDrafted(bool $drafted): static
-    {
-        $this->drafted = $drafted;
 
         return $this;
     }

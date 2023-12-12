@@ -38,7 +38,6 @@ class EventFormType extends AbstractType
             ->add('zipcode')
             ->add('address')
             ->add('location')
-            ->add('drafted')
         ;
     }
 

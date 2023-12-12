@@ -16,9 +16,16 @@
         {% if profile.verified %}
             <span class="badge bg-success">Vérifié</span>
         {% endif %}
-        <h6 class="card-subtitle mb-2 text-muted">id : {{ profile.id }}
-        <p class="card-text">Publiée le {{ profile.createdAt|format_datetime('full', 'short') }}</p>
-        <p class="card-text">Modifiée le {{ profile.updatedAt|format_datetime('full', 'short') }}</p>
+        <p class="card-text">Rôles : {{ profile.roles | join(', ') }}</p>
+        {% if app.user == profile or is_granted('ROLE_ADMIN') %}
+            <p class="card-text">Email : {{ profile.email }}</p>
+        {% endif %}
+        <p class="card-text">Nom : {{ profile.lastName }}</p>
+        <p class="card-text">Prénom : {{ profile.firstName }}</p>
+        <p class="card-text">Bio : {{ profile.biography | nl2br }}</p>
+        <p class="card-text">A organisé {{ profile.nbOrganizedEvents }} événements</p>
+        <p class="card-text">A participe a {{ profile.nbParticipatedEvents }} événements</p>
+        <p class="card-text">Inscrit le {{ profile.createdAt|format_datetime('full', 'short') }}</p>
         <div class="d-flex gap-2">
             {% if full == false %}
                 <a href="{{ path('app.profiles.show', { 'id': profile.id }) }}" class="btn btn-primary">Détails</a>

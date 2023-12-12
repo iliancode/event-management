@@ -1,23 +1,22 @@
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">{{ eventParticipation.id }}</h5>
-        <p class="card-text">{{ eventParticipation.event.title }}</p>
-        {% if eventParticipation.user %}
-            <p class="card-text">
-                <a href="{{ path('app.profiles.show', { 'id': eventParticipation.user.id }) }}" class="card-text">{{ eventParticipation.user.username }}</a>
-            </p>
-        {% else %}
-            <p class="card-text">{{ eventParticipation.fullname }}</p>
-        {% endif %}
-        <p class="card-text">{{ eventParticipation.banned ? 'Banned' : 'Not banned' }}</p>
-        {% if app.user == eventParticipation.event.organizer or is_granted('ROLE_ADMIN') %}
-            {%  if eventParticipation.user != null %}
-                {% include('frontend/event_participation/_banForm.html.twig') %}
+        <h5 class="card-title">
+            {% if eventParticipation.user %}
+                    <a href="{{ path('app.profiles.show', { 'id': eventParticipation.user.id }) }}" class="card-text">{{ eventParticipation.user.username }}</a>
+            {% else %}
+                {{ eventParticipation.fullname }}
             {% endif %}
-            {% if eventParticipation.fullname != null %}
-                <a href="{{ path('app.event_participation.edit', { 'id': eventParticipation.id }) }}" class="btn btn-primary">Edit</a>
+        </h5>
+        <div class="d-flex gap-2">
+            {% if app.user == eventParticipation.event.organizer or is_granted('ROLE_ADMIN') %}
+                {%  if eventParticipation.user != null %}
+                    {% include('frontend/event_participation/_banForm.html.twig') %}
+                {% endif %}
+                {% if eventParticipation.fullname != null %}
+                    <a href="{{ path('app.event_participation.edit', { 'id': eventParticipation.id }) }}" class="btn btn-primary">Edit</a>
+                {% endif %}
+                {% include('frontend/event_participation/_deleteForm.html.twig') %}
             {% endif %}
-            {% include('frontend/event_participation/_deleteForm.html.twig') %}
-        {% endif %}
+        </div>
     </div>
 </div>
