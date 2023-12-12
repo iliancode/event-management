@@ -6,6 +6,7 @@ use App\Constants\RouteConstants;
 use App\Constants\ToastConstants;
 use App\Entity\User;
 use App\Form\ProfileEmailFormType;
+use App\Form\ProfileFilterFormType;
 use App\Form\ProfileFormType;
 use App\Form\ProfilePasswordFormType;
 use App\Repository\UserRepository;
@@ -48,6 +49,18 @@ class ProfileController extends AbstractController
         $page = $request->query->getInt('page', 1) < 1 ? 1 : $request->query->getInt('page', 1);
         $limit = $request->query->getInt('limit', 10) < 1 ? 10 : $request->query->getInt('limit', 10);
 
+        // Handle the form submission
+        $filters = $this->createForm(ProfileFilterFormType::class, [
+            'search' => $request->query->get('search')
+        ]);
+        $filters->handleRequest($request);
+
+        if ($filters->get('search')->getData()) {
+            $items = $this->profileRepository->findBy([
+                'username' => $filters->get('search')->getData()
+            ]);
+        }
+
         $profiles= $this->paginator->paginate(
             $items,
             $page,
@@ -56,6 +69,7 @@ class ProfileController extends AbstractController
 
         return $this->render('frontend/profile/index.html.twig', [
             'profiles' => $profiles,
+            'filters' => $filters->createView()
         ]);
     }
 

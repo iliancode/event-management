@@ -7,6 +7,7 @@ use App\Constants\ToastConstants;
 use App\Entity\Event;
 use App\Entity\EventParticipation;
 use App\Entity\User;
+use App\Form\EventFilterFormType;
 use App\Form\EventFormType;
 use App\Form\EventParticipationFormType;
 use App\Repository\EventParticipationRepository;
@@ -74,6 +75,18 @@ class EventController extends AbstractController
         $page = $request->query->getInt('page', 1) < 1 ? 1 : $request->query->getInt('page', 1);
         $limit = $request->query->getInt('limit', 10) < 1 ? 10 : $request->query->getInt('limit', 10);
 
+        // Handle the form submission
+        $filters = $this->createForm(EventFilterFormType::class, [
+            'search' => $request->query->get('search')
+        ]);
+        $filters->handleRequest($request);
+
+        if ($filters->get('search')->getData()) {
+            $items = $this->eventRepository->findBy([
+                'title' => $filters->get('search')->getData()
+            ]);
+        }
+
         $events = $this->paginator->paginate(
             $items,
             $page,
@@ -82,6 +95,7 @@ class EventController extends AbstractController
 
         return $this->render('frontend/event/index.html.twig', [
             'events' => $events,
+            'filters' => $filters->createView()
         ]);
     }
 
