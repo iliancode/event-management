@@ -11,12 +11,14 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[Vich\Uploadable]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Il existe déjà un compte avec cet email.')]
+#[UniqueEntity(fields: ['username'], message: 'Il existe déjà un compte avec ce nom d\'utilisateur.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use Traits\TimeStampTrait;
@@ -27,6 +29,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank(message: 'Veuillez renseigner un email.')]
+    #[Assert\Email(message: 'Veuillez renseigner un email valide.')]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -36,18 +40,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Veuillez renseigner un mot de passe.')]
+    #[Assert\Length(min: 8, max: 50, minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.', maxMessage: 'Le mot de passe doit contenir au maximum {{ limit }} caractères.')]
+    #[Assert\NotCompromisedPassword(message: 'Ce mot de passe a été compromis. Veuillez en choisir un autre.')]
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: 'Veuillez renseigner un nom d\'utilisateur.')]
+    #[Assert\Length(min: 3, max: 50, minMessage: 'Le nom d\'utilisateur doit contenir au moins {{ limit }} caractères.', maxMessage: 'Le nom d\'utilisateur doit contenir au maximum {{ limit }} caractères.')]
     private ?string $username = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Length(max: 50, maxMessage: 'Le prénom doit contenir au maximum {{ limit }} caractères.')]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Length(max: 50, maxMessage: 'Le nom doit contenir au maximum {{ limit }} caractères.')]
     private ?string $lastname = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Length(max: 500, maxMessage: 'La biographie doit contenir au maximum {{ limit }} caractères.')]
     private ?string $biography = null;
 
     #[ORM\Column]

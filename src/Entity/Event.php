@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
@@ -23,24 +24,34 @@ class Event
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Veuillez renseigner un titre.')]
+    #[Assert\Length(max: 255, maxMessage: 'Le titre ne doit pas dépasser {{ limit }} caractères.')]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Veuillez renseigner une description.')]
+    #[Assert\Length(max: 255, maxMessage: 'La description ne doit pas dépasser {{ limit }} caractères.')]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\NotBlank(message: 'Veuillez renseigner une date.')]
+    #[Assert\GreaterThan(value: 'today', message: 'La date doit être supérieure à la date du jour.')]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(max: 255, maxMessage: 'La ville ne doit pas dépasser {{ limit }} caractères.')]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(max: 255, maxMessage: 'Le code postal ne doit pas dépasser {{ limit }} caractères.')]
     private ?string $zipcode = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(max: 255, maxMessage: 'L\'adresse ne doit pas dépasser {{ limit }} caractères.')]
     private ?string $address = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255, maxMessage: 'Le lieu ne doit pas dépasser {{ limit }} caractères.')]
     private ?string $location = null;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
