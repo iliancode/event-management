@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Type;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -20,6 +21,39 @@ class TypeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Type::class);
     }
+
+    public function findByFilters($filters): array
+    {
+        $queryBuilder = $this->createQueryBuilder('t');
+
+        foreach ($filters as $filterName => $filterValue) {
+            switch ($filterName) {
+                case 'search':
+                    if ($filterValue) {
+                        $queryBuilder = $this->findBySearch($queryBuilder, $filterValue);
+                    }
+                    break;
+                case 'order':
+                    if ($filterValue) {
+                        $queryBuilder = $queryBuilder
+                            ->orderBy('t.' . $filterValue, $filters['direction']);
+                    }
+                    break;
+            }
+        }
+        return $queryBuilder
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    private function findBySearch(QueryBuilder $queryBuilder, String $search): QueryBuilder
+    {
+        return $queryBuilder
+            ->andWhere('t.label LIKE :search')
+            ->setParameter('search', '%' . $search . '%');
+    }
+
 
 //    /**
 //     * @return Type[] Returns an array of Type objects

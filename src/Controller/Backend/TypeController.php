@@ -39,21 +39,23 @@ class TypeController extends AbstractController
     #[Route('', name: RouteConstants::ROUTE_TYPES, methods: ['GET', 'POST'])]
     public function index(Request $request): Response
     {
-        $items = $this->typeRepository->findAll();
         $page = $request->query->getInt('page', 1) < 1 ? 1 : $request->query->getInt('page', 1);
         $limit = $request->query->getInt('limit', 10) < 1 ? 10 : $request->query->getInt('limit', 10);
 
         // Handle the form submission
         $filters = $this->createForm(TypeFilterFormType::class, [
-            'search' => $request->query->get('search')
+            'search' => $request->query->get('search'),
+            'order' => $request->query->get('order') ?? 'createdAt',
+            'direction' => $request->query->get('direction') ?? 'DESC'
         ]);
         $filters->handleRequest($request);
 
-        if ($filters->get('search')->getData()) {
-            $items = $this->typeRepository->findBy([
-                'label' => $filters->get('search')->getData()
-            ]);
-        }
+        $requestFilters = [
+            'search' => $filters->get('search')->getData(),
+            'order' => $filters->get('order')->getData() ?? 'createdAt',
+            'direction' => $filters->get('direction')->getData() ?? 'DESC'
+        ];
+        $items = $this->typeRepository->findByFilters($requestFilters);
 
         $types = $this->paginator->paginate(
             $items,
