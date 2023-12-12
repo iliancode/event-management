@@ -5,6 +5,7 @@ namespace App\Controller\Backend;
 use App\Constants\RouteConstants;
 use App\Constants\ToastConstants;
 use App\Entity\Type;
+use App\Form\TypeFilterFormType;
 use App\Form\TypeFormType;
 use App\Repository\TypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,12 +36,24 @@ class TypeController extends AbstractController
         }
     }
 
-    #[Route('', name: RouteConstants::ROUTE_TYPES, methods: ['GET'])]
+    #[Route('', name: RouteConstants::ROUTE_TYPES, methods: ['GET', 'POST'])]
     public function index(Request $request): Response
     {
         $items = $this->typeRepository->findAll();
         $page = $request->query->getInt('page', 1) < 1 ? 1 : $request->query->getInt('page', 1);
         $limit = $request->query->getInt('limit', 10) < 1 ? 10 : $request->query->getInt('limit', 10);
+
+        // Handle the form submission
+        $filters = $this->createForm(TypeFilterFormType::class, [
+            'search' => $request->query->get('search')
+        ]);
+        $filters->handleRequest($request);
+
+        if ($filters->get('search')->getData()) {
+            $items = $this->typeRepository->findBy([
+                'label' => $filters->get('search')->getData()
+            ]);
+        }
 
         $types = $this->paginator->paginate(
             $items,
@@ -50,6 +63,7 @@ class TypeController extends AbstractController
 
         return $this->render('backend/type/index.html.twig', [
             'types' => $types,
+            'filters' => $filters->createView()
         ]);
     }
 
