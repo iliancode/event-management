@@ -84,6 +84,7 @@ class EventController extends AbstractController
 
         $requestFilters = [
             'search' => $filters->get('search')->getData(),
+            'cities' => $filters->get('cities')->getData(),
             'types' => $filters->get('types')->getData(),
             'state' => $filters->get('state')->getData(),
             'dateStart' => $filters->get('dateStart')->getData(),

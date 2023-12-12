@@ -22,6 +22,16 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
+    public function getUniqueCities(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e.city')
+            ->distinct()
+            ->orderBy('e.city', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findByFilters($filters): array
     {
         $queryBuilder = $this->createQueryBuilder('e');
@@ -36,6 +46,11 @@ class EventRepository extends ServiceEntityRepository
                 case 'types':
                     if ($filterValue && count($filterValue) > 0) {
                         $queryBuilder = $this->findByTypes($queryBuilder, $filterValue);
+                    }
+                    break;
+                case 'cities':
+                    if ($filterValue && count($filterValue) > 0) {
+                        $queryBuilder = $this->findByCities($queryBuilder, $filterValue);
                     }
                     break;
                 case 'dateStart':
@@ -74,6 +89,12 @@ class EventRepository extends ServiceEntityRepository
             ->setParameter('search', '%' . $search . '%');
     }
 
+    private function findByCities(QueryBuilder $queryBuilder, $cities): QueryBuilder
+    {
+        return $queryBuilder
+            ->andWhere('e.city IN (:cities)')
+            ->setParameter('cities', $cities);
+    }
     private function findByTypes(QueryBuilder $queryBuilder, $types): QueryBuilder
     {
         return $queryBuilder

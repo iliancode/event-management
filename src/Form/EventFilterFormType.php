@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Type;
+use App\Repository\EventRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -13,6 +14,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EventFilterFormType extends AbstractType
 {
+    public function __construct
+    (
+        private readonly EventRepository $eventRepository
+    )
+    {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -23,12 +31,17 @@ class EventFilterFormType extends AbstractType
                 ],
                 'required' => false
             ])
+            ->add('cities', ChoiceType::class, [
+                'choices' => $this->eventRepository->getUniqueCities(),
+                'choice_label' => fn($choice) => $choice,
+                'group_by' => fn($choice) => mb_substr($choice, 0, 1),
+                'multiple' => true,
+            ])
             ->add('types', EntityType::class, [
                 'class' => Type::class,
                 'choice_label' => 'label',
-                'expanded' => true,
                 'multiple' => true,
-                'required' => false
+                'required' => false,
             ])
             ->add('state', ChoiceType::class, [
                 'choices' => [
