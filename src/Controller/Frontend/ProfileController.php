@@ -67,6 +67,10 @@ class ProfileController extends AbstractController
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 $this->em->flush();
+
+                // REASON FOR THIS : to prevent serialization of the file
+                $profile->setImageFile(null);
+
                 $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le profile a bien été modifiée');
 
                 return $this->redirectToRoute(RouteConstants::ROUTE_PROFILES);

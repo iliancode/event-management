@@ -1,4 +1,13 @@
 <div class="card">
+    <div class="card-header">
+        {% if profile.imageName %}
+            <img src="{{ vich_uploader_asset(profile) }}" alt="{{ profile.username }}"
+                 class="card-img-top">
+        {% else %}
+            <img src="{{ asset('images/users/default.png') }}" alt="{{ profile.username }}"
+                 class="card-img-top">
+        {% endif %}
+    </div>
     <div class="card-body">
         <h5 class="card-title">{{ profile.username }}</h5>
         {% if profile.banned %}
