@@ -6,7 +6,7 @@
 
 
 
-                <div class="card mb-3" style="max-width: 540px; border:0px">
+                <div class="card mb-3" style="max-width: 540px; border:0">
                     <div class="row g-0">
                         <div class="col-md-4 d-flex flex-column align-content-center justify-content-center ">
 
@@ -20,7 +20,7 @@
                                     <img class="img-fluid  " src="{{ asset('images/users/default.png') }}" alt="{{ profile.username }}"
                                     >
                                 {% endif %}
-                                {% include('frontend/profile/_actions.html.twig') %}
+                                {% include('frontend/profile/_actions.html.twig') with { 'column':true} %}
 
 
                             </div>

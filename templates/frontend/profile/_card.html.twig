@@ -26,22 +26,8 @@
         <p class="card-text">A organisé {{ profile.nbOrganizedEvents }} événements</p>
         <p class="card-text">A participe a {{ profile.nbParticipatedEvents }} événements</p>
         <p class="card-text">Inscrit le {{ profile.createdAt|format_datetime('full', 'short') }}</p>
-        <div class="d-flex gap-2">
-            {% if full == false %}
-                <a href="{{ path('app.profiles.show', { 'id': profile.id }) }}" class="btn btn-primary">Détails</a>
-            {% endif %}
-            {% if app.user and profile == app.user or is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('app.profiles.edit', { 'id': profile.id }) }}" class="btn btn-warning">Modifier</a>
-                {%  if profile.verified == false %}
-                    <a href="{{ path('app.profiles.verify.email', { 'id': profile.id }) }}" class="btn btn-success">Envoyer un email de vérification</a>
-                {% endif %}
-                <a href="{{ path('app.profiles.edit.email', { 'id': profile.id }) }}" class="btn btn-warning">Modifier email</a>
-                <a href="{{ path('app.profiles.edit.password', { 'id': profile.id }) }}" class="btn btn-warning">Modifier mot de passe</a>
-                {% include('frontend/profile/_deleteForm.html.twig') %}
-                {% if is_granted('ROLE_ADMIN') %}
-                    {% include('frontend/profile/_banForm.html.twig') %}
-                {% endif %}
-            {% endif %}
-        </div>
+
+        {% include('frontend/profile/_actions.html.twig') with { 'column':false} %}
+
     </div>
 </div>
