@@ -2,7 +2,7 @@
 <html lang="">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}{% endblock %} | ESGI EVENTS</title>
+        <title>{% block title %}{% endblock %} | LOF</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
@@ -14,13 +14,12 @@
     <body class="min-vh-100 d-flex flex-column">
         {% include 'layouts/_header.html.twig' %}
         <main class="flex-grow-1">
-            <div class="container my-5">
+            <div>
                 {% block body %}{% endblock %}
             </div>
         </main>
         <aside>
             {% include 'layouts/_toasts.html.twig' %}
         </aside>
-        {% include 'layouts/_footer.html.twig' %}
     </body>
 </html>

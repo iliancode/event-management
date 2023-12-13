@@ -65,7 +65,7 @@ class SecurityUtils
     {
         $this->emailVerifier->sendEmailConfirmation(RouteConstants::ROUTE_VERIFY_EMAIL, $user,
             (new TemplatedEmail())
-                ->from(new Address('noreply@esi-events.fr', 'ESGI EVENTS'))
+                ->from(new Address('noreply@esgi-events.fr', 'LOF'))
                 ->to($user->getEmail())
                 ->subject('Please Confirm your Email')
                 ->htmlTemplate('security/confirmation_email.html.twig')

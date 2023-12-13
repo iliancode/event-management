@@ -3,12 +3,47 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <h1>ESGI EVENTS</h1>
-    <section class="py-3">
-        <div class="row">
-            <div class="col">
-                <p class="lead">Bienvenue sur esgi events</p>
+    <div class="col-12 " style="height: 100vh">
+
+
+        <section style="height: 65%">
+            <img src="{{ asset('build/images/bg-home.png') }}" class="img-fluid"/>
+        </section>
+        <section style="height: 35%" class="container mt-4">
+            <h3>
+                Les événements qui pourraient vous intéresser :
+            </h3>
+            <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4 mt-2">
+                <div class="col">
+                    <div class="card" >
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 {% endblock %}
