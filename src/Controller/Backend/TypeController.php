@@ -65,7 +65,7 @@ class TypeController extends AbstractController
 
         return $this->render('backend/type/index.html.twig', [
             'types' => $types,
-            'filters' => $filters->createView()
+            'filters' => $filters->createView(),
         ]);
     }
 

@@ -6,8 +6,11 @@
     <h1>Les types ({{ types.totalItemCount }})</h1>
     <section class="py-3">
         <div class="row">
-            <div class="col">
-                <a class="btn btn-secondary" href="{{ path('app.types.create') }}">Ajouter une type</a>
+            <div class="col d-flex">
+                <a class="btn btn-secondary me-2" href="{{ path('app.types.create') }}">Ajouter une type</a>
+                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#filterModal">
+                    <i class="bi bi-funnel-fill"></i>
+                </button>
             </div>
         </div>
     </section>
