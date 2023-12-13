@@ -1,11 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Les profiles{% endblock %}
+{% block title %}Utilisateurs{% endblock %}
 
 {% block body %}
-    <h1>Les profiles ({{ profiles.totalItemCount  }})</h1>
-    <section class="py-3">
+    <div class="container mt-3">
+        <div class="d-flex gap-2 justify-content-between">
+                <h1>Les utilisateurs ({{ profiles.totalItemCount  }})</h1>
 
-        {% include 'frontend/profile/_list.html.twig' with { profiles: profiles } %}
-    </section>
+                <button type="button" class="btn btn-primary my-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <i class="bi bi-funnel-fill"></i>
+                </button>
+
+        </div>
+        <hr/>
+
+        {% include ('frontend/profile/_modal_filter.html.twig' ) %}
+
+        <section class="py-3">
+
+            {% include 'frontend/profile/_list.html.twig' with { profiles: profiles } %}
+        </section>
+    </div>
+
 {% endblock %}
