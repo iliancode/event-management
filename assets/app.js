@@ -9,3 +9,6 @@ import './scripts/toast.js';
 
 // Stimulus application
 import './bootstrap';
+
+import './images/bg-home-fm.png';
+import './images/bg-home.png';
