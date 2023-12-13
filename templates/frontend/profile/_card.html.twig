@@ -1,21 +1,29 @@
 <div class="card">
-    <div class="card-header">
-        {% if profile.imageName %}
-            <img src="{{ vich_uploader_asset(profile) }}" alt="{{ profile.username }}"
-                 class="card-img-top">
-        {% else %}
-            <img src="{{ asset('images/users/default.png') }}" alt="{{ profile.username }}"
-                 class="card-img-top">
-        {% endif %}
-    </div>
+
     <div class="card-body">
-        <h5 class="card-title">{{ profile.username }}</h5>
-        {% if profile.banned %}
-            <span class="badge bg-danger">Banni</span>
-        {% endif %}
-        {% if profile.verified %}
-            <span class="badge bg-success">Vérifié</span>
-        {% endif %}
+        <div class="d-flex flex-row justify-content-between">
+            <div>
+                <h5 class="card-title">{{ profile.username }}</h5>
+                {% if profile.banned %}
+                    <span class="badge bg-danger">Banni</span>
+                {% endif %}
+                {% if profile.verified %}
+                    <span class="badge bg-success">Vérifié</span>
+                {% endif %}
+
+            </div>
+
+            <div class="">
+                {% if profile.imageName %}
+                    <img src="{{ vich_uploader_asset(profile) }}" alt="profile"
+                         class="rounded-circle" width="40" height="40">
+                {% else %}
+                    <img src="{{ asset('images/users/default.png') }}" alt="profile"
+                         class="rounded-circle" width="40" height="40">
+                {% endif %}
+            </div>
+
+        </div>
         <p class="card-text">Rôles : {{ profile.roles | join(', ') }}</p>
         {% if app.user == profile or is_granted('ROLE_ADMIN') %}
             <p class="card-text">Email : {{ profile.email }}</p>
