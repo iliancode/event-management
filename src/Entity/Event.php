@@ -291,7 +291,8 @@ class Event
 
     public function isMaxParticipantsReached(): bool
     {
-        return $this->getNbRealParticipants() >= $this->getType()->getMaxParticipants();
+        # return $this->getNbRealParticipants() >= $this->getType()->getMaxParticipants();
+        return true;
     }
 
     public function getRemainingPlaces(): int

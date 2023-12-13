@@ -1,61 +1,65 @@
-<div class="card">
-    <div class="card-header">
-        {% if event.imageName %}
-            <img src="{{ vich_uploader_asset(event) }}" class="card-img-top" alt="{{ event.title }}">
-        {% else %}
-            <img src="{{ asset('images/events/default.png') }}" class="card-img-top" alt="{{ event.title }}">
-        {% endif %}
-    </div>
-    <div class="card-body">
-        <h5 class="card-title">{{ event.title }}</h5>
-        {% if event.isPassed %}
-            <span class="badge bg-danger">Passé</span>
-        {% else%}
-            <span class="badge bg-warning">A venir</span>
-        {% endif %}
-        <span class="badge bg-primary">{{ event.type.label }}</span>
-        <p class="card-text">{{ event.description | nl2br }}</p>
-        <p class="card-text">Organisé par <a href="{{ path('app.profiles.show', { 'id': event.organizer.id }) }}">{{ event.organizer.username }}</a></p>
-        <p class="card-text">Date : {{ event.date|format_datetime('full', 'short') }}</p>
-        <p class="card-text">Ville : {{ event.city }}</p>
-        <p class="card-text">Adresse : {{ event.address }}</p>
-        <p class="card-text">Code postal : {{ event.zipcode }}</p>
-        <p class="card-text">Localisation : {{ event.location }}</p>
-        <p class="card-text">Participants : {{ event.nbRealParticipants | length }}</p>
-        <p class="card-text">Publiée le {{ event.createdAt|format_datetime('full', 'short') }}</p>
-        <div class="d-flex gap-2">
-            {% if full == false %}
-                <a href="{{ path('app.events.show', { 'id': event.id }) }}" class="btn btn-primary">Détails</a>
-            {% endif %}
-            {% if app.user and event.organizer == app.user or is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('app.events.edit', { 'id': event.id }) }}" class="btn btn-warning">Modifier</a>
-                {% include('frontend/event/_deleteForm.html.twig') %}
-            {% endif %}
-            {% if (app.user == event.organizer or is_granted('ROLE_ADMIN')) and event.maxParticipantsReached() == false and event.isPassed == false %}
-                <a class="btn btn-secondary" href="{{ path('app.events.add', { id: event.id }) }}">Ajouter un participant non inscrit</a>
-            {% endif %}
-        </div>
-        {% if app.user %}
-            {% if  event.isBannedFromEvent(app.user) == false %}
-                <div class="d-flex gap-2 mt-3">
-                    {% if event.inEvent(app.user) %}
-                        {% include('frontend/event/_leaveForm.html.twig') %}
-                    {% elseif event.maxParticipantsReached() == false and event.isPassed == false %}
-                        {% include('frontend/event/_joinForm.html.twig') %}
-                    {% endif %}
-                </div>
-            {% endif %}
-            {% if  event.isBannedFromEvent(app.user) %}
-                <p class="text-danger">Vous avez été banni de cet événement</p>
-            {% endif %}
-        {% endif %}
-        {% if event.maxParticipantsReached() %}
-            <p class="text-danger">Cet événement est complet</p>
-        {% elseif event.isPassed == false %}
-            <p class="text-success">Il reste {{ event.getRemainingPlaces }} places</p>
-        {% endif %}
-        {% if event.isPassed %}
-            <p class="text-danger">Cet événement est passé</p>
-        {% endif %}
-    </div>
+<div class="card" style="height: auto;">
+	<div class="card-header" style="height: 200px; overflow: hidden;">
+		{% if event.imageName %}
+			<img src="{{ vich_uploader_asset(event) }}" class="card-img-top img-fluid" style="height: 100%; object-fit: cover; width: auto; min-width: 100%;" alt="{{ event.title }}">
+		{% else %}
+			<img src="{{ asset('images/events/default.png') }}" class="card-img-top img-fluid" style="height: 100%; object-fit: cover; width: auto; min-width: 100%;" alt="{{ event.title }}">
+		{% endif %}
+	</div>
+	<div class="card-body">
+		{% if full == false %}
+			<a href="{{ path('app.events.show', { 'id': event.id }) }}" class="text-decoration-none">
+				<h5 class="card-title">{{ event.title }}</h5>
+			</a>
+		{% else %}
+			<h5 class="card-title">{{ event.title }}</h5>
+		{% endif %}
+		{% if event.isPassed %}
+			<span class="badge bg-danger">Passé</span>
+		{% elseif event.maxParticipantsReached() %}
+			<span class="badge bg-secondary">Complet</span>
+		{% else %}
+			<span class="badge bg-warning">À venir</span>
+		{% endif %}
+
+		<span class="badge bg-primary">{{ event.type.label }}</span>
+		<p class="card-text">Organisé par
+			<a href="{{ path('app.profiles.show', { 'id': event.organizer.id }) }}">{{ event.organizer.username }}</a>
+		</p>
+		<p class="card-text">
+			<i class="bi bi-calendar-check"></i>
+			{{ event.date|format_datetime('full', 'short') }}</p>
+		<p class="card-text">
+			<i class="bi bi-geo-alt-fill"></i>
+			{{ event.city }},
+			{{ event.zipcode }}</p>
+		<p class="card-text">
+			<i class="bi bi-people-fill"></i>
+			{{ event.nbRealParticipants | length }}/{{ event.getMaxParticipants }}</p>
+		<div class="d-flex gap-2">
+			{% if app.user and event.organizer == app.user or is_granted('ROLE_ADMIN') %}
+				<a href="{{ path('app.events.edit', { 'id': event.id }) }}" class="btn btn-warning">
+					<i class="bi bi-pencil-fill"></i>
+				</a>
+				{% include('frontend/event/_deleteForm.html.twig') %}
+			{% endif %}
+			{% if (app.user == event.organizer or is_granted('ROLE_ADMIN')) and event.maxParticipantsReached() == false and event.isPassed == false %}
+				<a class="btn btn-secondary" href="{{ path('app.events.add', { id: event.id }) }}">Ajouter un participant non inscrit</a>
+			{% endif %}
+		</div>
+		{% if app.user %}
+			{% if  event.isBannedFromEvent(app.user) == false %}
+				<div class="d-flex gap-2 mt-3">
+					{% if event.inEvent(app.user) %}
+						{% include('frontend/event/_leaveForm.html.twig') %}
+					{% elseif event.maxParticipantsReached() == false and event.isPassed == false %}
+						{% include('frontend/event/_joinForm.html.twig') %}
+					{% endif %}
+				</div>
+			{% endif %}
+			{% if  event.isBannedFromEvent(app.user) %}
+				<p class="text-danger">Vous avez été banni de cet événement</p>
+			{% endif %}
+		{% endif %}
+	</div>
 </div>
