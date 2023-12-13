@@ -1,15 +1,23 @@
 <div class="card">
-    <div class="card-body">
-        <h5 class="card-title">{{ type.label }}</h5>
-        <p class="card-text">Participants max : {{ type.maxParticipants }}</p>
-        <p class="card-text">Evenement de ce type : {{ type.events|length }}</p>
-        <p class="card-text">Publiée le {{ type.createdAt|format_datetime('full', 'short') }}</p>
-        <div class="d-flex gap-2">
-            {% if full == false %}
-                <a href="{{ path('app.types.show', { 'id': type.id }) }}" class="btn btn-primary">Détails</a>
-            {% endif %}
-            <a href="{{ path('app.types.edit', { 'id': type.id }) }}" class="btn btn-warning">Modifier</a>
-            {% include('backend/type/_deleteForm.html.twig') %}
-        </div>
-    </div>
+	<div class="card-body">
+		{% if full == false %}
+			<a href="{{ path('app.types.show', { 'id': type.id }) }}">
+				<h5 class="card-title">{{ type.label }}</h5>
+			</a>
+		{% else %}
+			<h5 class="card-title">{{ type.label }}</h5>
+		{% endif %}
+		<p class="card-text">
+			<i class="bi bi-people-fill"></i>
+			{{ type.maxParticipants }}</p>
+		<p class="card-text">Evenement de ce type :
+			{{ type.events|length }}</p>
+		<p class="card-text"><i class="bi bi-calendar-check"></i> {{ type.createdAt|format_datetime('full', 'short') }}</p>
+		<div class="d-flex gap-2">
+			<a href="{{ path('app.types.edit', { 'id': type.id }) }}" class="btn">
+				<i class="bi bi-pencil-fill"></i>
+			</a>
+			{% include('backend/type/_deleteForm.html.twig') %}
+		</div>
+	</div>
 </div>
