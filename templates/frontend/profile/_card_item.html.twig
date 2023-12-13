@@ -1,0 +1,46 @@
+<div class="container" >
+    <div class="row mt-5" >
+        <div class="col" >
+            <div>
+                {% if profile.imageName %}
+                    <img style="width: 240px" src="{{ vich_uploader_asset(profile) }}" alt="{{ profile.username }}"
+                    >
+                {% else %}
+                    <img style="width: 240px" src="{{ asset('images/users/default.png') }}" alt="{{ profile.username }}"
+                    >
+                {% endif %}
+            </div>
+        </div>
+        <div class="col">
+
+            <div >
+
+                <h5 >{{ profile.username }}</h5>
+                {% if profile.banned %}
+                    <span class="badge bg-danger">Banni</span>
+                {% endif %}
+                {% if profile.verified %}
+                    <span class="badge bg-success">Vérifié</span>
+                {% endif %}
+                <p>Rôles : {{ profile.roles | join(', ') }}</p>
+                {% if app.user == profile or is_granted('ROLE_ADMIN') %}
+                    <p>Email : {{ profile.email }}</p>
+                {% endif %}
+                <p  >Nom : {{ profile.lastName }}</p>
+                <p  >Prénom : {{ profile.firstName }}</p>
+                <p  >Bio : {{ profile.biography | nl2br }}</p>
+                <p  >A organisé {{ profile.nbOrganizedEvents }} événements</p>
+                <p  >A participe a {{ profile.nbParticipatedEvents }} événements</p>
+                <p  >Inscrit le {{ profile.createdAt|format_datetime('full', 'short') }}</p>
+
+
+
+
+                {% include('frontend/profile/_actions.html.twig') %}
+
+
+            </div>
+        </div >
+
+    </div>
+</div>
