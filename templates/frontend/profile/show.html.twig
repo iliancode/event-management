@@ -3,6 +3,14 @@
 {% block title %}{{ profile.username }}{% endblock %}
 
 {% block body %}
+
+    <div class="container mt-3">
+        <h1>
+            Profil de {{ profile.username }}
+
+        </h1>
+        <hr/>
+    </div>
     {% include 'frontend/profile/_card_item.html.twig' with { profile: profile, full: true } %}
 {% endblock %}
 
