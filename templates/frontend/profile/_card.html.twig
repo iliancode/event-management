@@ -3,7 +3,9 @@
     <div class="card-body">
         <div class="d-flex flex-row justify-content-between">
             <div>
-                <h5 class="card-title">{{ profile.username }}</h5>
+                <a href="{{ path('app.profiles.show', { 'id': profile.id }) }}">
+
+                    <h5 class="card-title">{{ profile.username }}</h5> </a>
                 {% if profile.banned %}
                     <span class="badge bg-danger">Banni</span>
                 {% endif %}
@@ -15,11 +17,15 @@
 
             <div class="">
                 {% if profile.imageName %}
-                    <img src="{{ vich_uploader_asset(profile) }}" alt="profile"
+                    <a href="{{ path('app.profiles.show', { 'id': profile.id }) }}">
+                        <img src="{{ vich_uploader_asset(profile) }}" alt="profile"
                          class="rounded-circle" width="40" height="40">
+                    </a>
                 {% else %}
+                <a href="{{ path('app.profiles.show', { 'id': profile.id }) }}">
                     <img src="{{ asset('images/users/default.png') }}" alt="profile"
                          class="rounded-circle" width="40" height="40">
+                </a>
                 {% endif %}
             </div>
 
