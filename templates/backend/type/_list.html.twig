@@ -1,13 +1,13 @@
 {% include 'backend/type/_filters.html.twig' with { 'types': types } %}
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
-    {% for type in types %}
-        <div class="col">
-            {% include 'backend/type/_card.html.twig' with { 'type': type, 'full': false } %}
-        </div>
-    {% endfor %}
+<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4 mb-4 justify-content-center">
+	{% for type in types %}
+		<div class="col d-flex justify-content-center">
+			{% include 'backend/type/_card.html.twig' with { 'type': type, 'full': false } %}
+		</div>
+	{% endfor %}
 </div>
 
 <div class="navigation">
-        {{ knp_pagination_render(types) }}
+	{{ knp_pagination_render(types) }}
 </div>
