@@ -1,9 +1,34 @@
-<div class="card mb-3 p-3">
-    <h2>Filtres</h2>
-    {{ form_start(filters) }}
-    {{ form_widget(filters) }}
-    <button type="submit" class="btn btn-primary">
-        Rechercher
-    </button>
-    {{ form_end(filters) }}
+<div class="card mb-3 p-3" style="width: 90%; margin: 0 auto;">
+    <form name="type_filter_form" method="get" class="form">
+        <div class="row" id="type_filter_form">
+            
+            <!-- Champ Order -->
+            <div class="col-md-6 mb-3">
+                <label class="form-label" for="type_filter_form_order">Order</label>
+                <select id="type_filter_form_order" name="type_filter_form[order]" class="form-select">
+                    <option value=""></option>
+                    <option value="label">Label</option>
+                    <option value="createdAt">Date de création</option>
+                    <option value="updatedAt" selected="selected">Date de mise à jour</option>
+                </select>
+            </div>
+
+            <!-- Champ Direction -->
+            <div class="col-md-6 mb-3">
+                <label class="form-label" for="type_filter_form_direction">Direction</label>
+                <select id="type_filter_form_direction" name="type_filter_form[direction]" class="form-select">
+                    <option value=""></option>
+                    <option value="ASC" selected="selected">Croissant</option>
+                    <option value="DESC">Décroissant</option>
+                </select>
+            </div>
+
+            <!-- Token CSRF caché et bouton de soumission -->
+            <input type="hidden" id="type_filter_form__token" name="type_filter_form[_token]" value="2dce459b.RxVWdPv7ZiJ3MnVReD7DDKZuA1yTu3OBMPtwFmDFNz0.fixgBbWsIFgBYgQBD3GQPexdaGXeiQDpQZIKLxmjTn8-bTgHkaMxUSZZAg">
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Rechercher
+        </button>
+    </form>
 </div>
