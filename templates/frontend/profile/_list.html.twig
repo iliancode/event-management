@@ -1,4 +1,9 @@
-{% include 'frontend/profile/_filters.html.twig' with { 'profiles': profiles } %}
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <i class="bi bi-funnel-fill"></i>
+</button>
+
+{% include ('frontend/profile/_modal_filter.html.twig' ) %}
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
     {% for profile in profiles %}

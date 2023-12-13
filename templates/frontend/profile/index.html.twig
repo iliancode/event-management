@@ -5,6 +5,7 @@
 {% block body %}
     <h1>Les profiles ({{ profiles.totalItemCount  }})</h1>
     <section class="py-3">
+
         {% include 'frontend/profile/_list.html.twig' with { profiles: profiles } %}
     </section>
 {% endblock %}
