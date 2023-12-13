@@ -36,12 +36,14 @@ class EventFilterFormType extends AbstractType
                 'choice_label' => fn($choice) => $choice,
                 'group_by' => fn($choice) => mb_substr($choice, 0, 1),
                 'multiple' => true,
+                'autocomplete' => true
             ])
             ->add('types', EntityType::class, [
                 'class' => Type::class,
                 'choice_label' => 'label',
                 'multiple' => true,
                 'required' => false,
+                'autocomplete' => true
             ])
             ->add('state', ChoiceType::class, [
                 'choices' => [
