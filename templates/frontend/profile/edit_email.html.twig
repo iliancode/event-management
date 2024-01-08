@@ -1,15 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier email{% endblock %}
-
-{% block body %}
-    <h1>Modifier email</h1>
-    {{ form_start(form, {'attr': {'class': 'card p-3'}}) }}
-    {{ form_widget(form) }}
-    <button type="submit" class="btn btn-primary">
-        Modifier email
-    </button>
-    {{ form_end(form) }}
+{% block title %}Modifier email
 {% endblock %}
 
-
+{% block body %}
+	<h1>Modifier email</h1>
+	{{ form_start(form, {'attr': {'class': 'card p-3'}}) }}
+	{{ form_widget(form) }}
+	<button type="submit" class="btn btn-primary mt-2">
+		Modifier email
+	</button>
+	{{ form_end(form) }}
+{% endblock %}

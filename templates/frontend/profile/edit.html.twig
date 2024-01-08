@@ -1,18 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier le profile : {{ profile.username }}{% endblock %}
+{% block title %}Modifier le profil :
+	{{ profile.username }}
+{% endblock %}
 
 {% block body %}
-    <h1>Modifier le profile : {{ profile.username }}</h1>
-    <section class="py-3">
-        {% include('frontend/profile/_form.html.twig') with {'button_label': 'Modifier'} %}
-    </section>
+	<h1>Modifier le profil :
+		{{ profile.username }}</h1>
+	<section class="py-3">
+		{% include 'frontend/profile/_form.html.twig' with {'button_label': 'Modifier'} %}
+	</section>
 
-    <section class="py-3">
-        <div class="row">
-            <div class="col">
-                <a class="btn btn-secondary" href="{{ path('app.profiles') }}">Retour à la liste</a>
-            </div>
-        </div>
-    <section class="py-3">
+	<section class="py-3">
+		<div class="row">
+			<div class="col">
+				<a class="btn btn-secondary" href="{{ path('app.profiles') }}">Retour à la liste</a>
+			</div>
+		</div>
+	</section>
 {% endblock %}

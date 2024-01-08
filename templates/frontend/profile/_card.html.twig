@@ -1,47 +1,53 @@
-<div class="card">
+<div class="card shadow-sm">
+	<div class="card-body">
+		<div class="d-flex flex-row justify-content-between align-items-center mb-2">
+			<div>
+				<a href="{{ path('app.profiles.show', { 'id': profile.id }) }}" class="text-decoration-none">
+					<h5 class="card-title mb-1">{{ profile.username }}</h5>
+				</a>
+				<div>
+					{% if profile.banned %}
+						<span class="badge bg-danger me-1">Banni</span>
+					{% endif %}
+					{% if profile.verified %}
+						<span class="badge bg-success">Vérifié</span>
+					{% endif %}
+				</div>
+			</div>
 
-    <div class="card-body">
-        <div class="d-flex flex-row justify-content-between">
-            <div>
-                <a href="{{ path('app.profiles.show', { 'id': profile.id }) }}">
+			<div>
+				{% if profile.imageName %}
+					<a href="{{ path('app.profiles.show', { 'id': profile.id }) }}">
+						<img src="{{ vich_uploader_asset(profile) }}" alt="{{ profile.username }} profile image" class="rounded-circle" width="40" height="40">
+					</a>
+				{% else %}
+					<a href="{{ path('app.profiles.show', { 'id': profile.id }) }}">
+						<img src="{{ asset('images/users/default.png') }}" alt="profile" class="rounded-circle" width="40" height="40">
+					</a>
+				{% endif %}
+			</div>
+		</div>
+		<p class="card-text mb-1">Rôles :
+			{{ profile.roles | join(', ') | replace({'ROLE_': ''}) }}</p>
+		{% if app.user == profile or is_granted('ROLE_ADMIN') %}
+			<p class="card-text mb-1">Email :
+				{{ profile.email }}</p>
+		{% endif %}
+		<p class="card-text mb-1">Nom :
+			{{ profile.lastName }}</p>
+		<p class="card-text mb-1">Prénom :
+			{{ profile.firstName }}</p>
+		<p class="card-text mb-1">Bio :
+			{{ profile.biography | nl2br }}</p>
+		<p class="card-text mb-1">A organisé
+			{{ profile.nbOrganizedEvents }}
+			événement(s)</p>
+		<p class="card-text mb-1">A participé à
+			{{ profile.nbParticipatedEvents }}
+			événement(s)</p>
+		<p class="card-text">Inscrit le
+			{{ profile.createdAt|format_datetime('full', 'short') }}</p>
 
-                    <h5 class="card-title">{{ profile.username }}</h5> </a>
-                {% if profile.banned %}
-                    <span class="badge bg-danger">Banni</span>
-                {% endif %}
-                {% if profile.verified %}
-                    <span class="badge bg-success">Vérifié</span>
-                {% endif %}
-
-            </div>
-
-            <div class="">
-                {% if profile.imageName %}
-                    <a href="{{ path('app.profiles.show', { 'id': profile.id }) }}">
-                        <img src="{{ vich_uploader_asset(profile) }}" alt="profile"
-                         class="rounded-circle" width="40" height="40">
-                    </a>
-                {% else %}
-                <a href="{{ path('app.profiles.show', { 'id': profile.id }) }}">
-                    <img src="{{ asset('images/users/default.png') }}" alt="profile"
-                         class="rounded-circle" width="40" height="40">
-                </a>
-                {% endif %}
-            </div>
-
-        </div>
-        <p class="card-text">Rôles : {{ profile.roles | join(', ') }}</p>
-        {% if app.user == profile or is_granted('ROLE_ADMIN') %}
-            <p class="card-text">Email : {{ profile.email }}</p>
-        {% endif %}
-        <p class="card-text">Nom : {{ profile.lastName }}</p>
-        <p class="card-text">Prénom : {{ profile.firstName }}</p>
-        <p class="card-text">Bio : {{ profile.biography | nl2br }}</p>
-        <p class="card-text">A organisé {{ profile.nbOrganizedEvents }} événements</p>
-        <p class="card-text">A participe a {{ profile.nbParticipatedEvents }} événements</p>
-        <p class="card-text">Inscrit le {{ profile.createdAt|format_datetime('full', 'short') }}</p>
-
-        {% include('frontend/profile/_actions.html.twig') with { 'column':false} %}
-
-    </div>
+		{% include 'frontend/profile/_actions.html.twig' with { 'column': false } %}
+	</div>
 </div>

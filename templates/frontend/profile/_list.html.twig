@@ -1,14 +1,15 @@
-<!-- Button trigger modal -->
-
-
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
-    {% for profile in profiles %}
-        <div class="col">
-            {% include 'frontend/profile/_card.html.twig' with { 'profile': profile, 'full': false } %}
-        </div>
-    {% endfor %}
+	{% for profile in profiles %}
+		<div class="col">
+			{% include 'frontend/profile/_card.html.twig' with { 'profile': profile } %}
+		</div>
+	{% else %}
+		<div class="col">
+			<p>Aucun utilisateur trouvé.</p>
+		</div>
+	{% endfor %}
 </div>
 
 <div class="navigation">
-        {{ knp_pagination_render(profiles) }}
+	{{ knp_pagination_render(profiles) }}
 </div>

@@ -1,12 +1,12 @@
 {{ form_start(form, {'attr': {'class': 'card p-3'}}) }}
-    {{ form_row(form.username) }}
-    {{ form_row(form.firstname) }}
-    {{ form_row(form.lastname) }}
-    {{ form_row(form.biography) }}
-    {% if is_granted('ROLE_ADMIN') %}
-        {{ form_row(form.roles) }}
-    {% endif %}
-    <button type="submit" class="btn btn-primary">
-        {{ button_label|default('Créer') }}
-    </button>
+{{ form_row(form.username) }}
+{{ form_row(form.firstname) }}
+{{ form_row(form.lastname) }}
+{{ form_row(form.biography) }}
+{% if is_granted('ROLE_ADMIN') %}
+	{{ form_row(form.roles) }}
+{% endif %}
+<button type="submit" class="btn btn-primary mt-2">
+	{{ button_label|default('Créer') }}
+</button>
 {{ form_end(form) }}
