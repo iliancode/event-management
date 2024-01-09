@@ -3,47 +3,31 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <div class="col-12 " style="height: 100vh">
-
-
-        <div>
-            <img src="{{ asset('build/images/bg-home.png') }}" class="img-fluid" style="width: 100%" />
-        </div>
-        <div class="container mt-4">
-            <h3>
-                Les événements qui pourraient vous intéresser :
-            </h3>
-            <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4 mt-2">
+<div class="col-12">
+    <div>
+        <img src="{{ asset('build/images/bg-home.png') }}" class="img-fluid" style="width: 100%"/>
+    </div>
+    <div class="container mt-4">
+        <h3>Les événements qui pourraient vous intéresser :</h3>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 mb-4 mt-2">
+            {% for event in events %}
                 <div class="col">
-                    <div class="card" >
+                    <div class="card h-100">
+                        <div class="card-header" style="height: 200px; overflow: hidden;">
+                            <img src="{{ event.imageName ? vich_uploader_asset(event) : asset('images/events/default.png') }}" class="card-img-top img-fluid" style="height: 100%; object-fit: cover; width: auto; min-width: 100%;" alt="{{ event.title | escape('html_attr') }}">
+                        </div>
                         <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <p class="card-text">{{ event.description }}</p>
+                            <p class="card-text"><i class="bi bi-calendar-check"></i> {{ event.date|date('Y-m-d H:i') }}</p>
+                            <p class="card-text"><i class="bi bi-geo-alt-fill"></i> {{ event.city }}, {{ event.address }}</p>
+                            <a href="/events/{{ event.id }}" class="btn btn-primary">En savoir plus</a>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
+            {% else %}
+                <p>Aucun événement à venir.</p>
+            {% endfor %}
         </div>
     </div>
+</div>
 {% endblock %}
