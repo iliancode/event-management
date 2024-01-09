@@ -3,6 +3,8 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
+    <div class="container">
+
 <form method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -14,27 +16,29 @@
         </div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <h1 class="h3 mb-3 font-weight-normal">Connectez-vous</h1>
     <label for="inputEmail">Email</label>
     <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
+    <label for="inputPassword">Mot de passe</label>
     <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 
     <div class="checkbox mb-3">
         <label>
-            <input type="checkbox" name="_remember_me"> Remember me
+            <input type="checkbox" name="_remember_me"> Se souvenir de moi
         </label>
     </div>
 
-    <a href="{{ path('app.forgot.password.request') }}">Forgot password?</a>
+    <a href="{{ path('app.forgot.password.request') }}">Mot de passe oublié?</a>
 
     <div class="mb-3">
         <input type="hidden" name="_csrf_token"
                value="{{ csrf_token('authenticate') }}"
         >
         <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
+            Se connecter
         </button>
     </div>
 </form>
+    </div>
+
 {% endblock %}
