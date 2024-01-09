@@ -1,16 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ profile.username }}{% endblock %}
-
-{% block body %}
-
-    <div class="container mt-3">
-        <h1>
-            Profil de {{ profile.username }}
-
-        </h1>
-        <hr/>
-    </div>
-    {% include 'frontend/profile/_card_item.html.twig' with { profile: profile, full: true } %}
+{% block title %}
+	{{ profile.username }}
 {% endblock %}
 
+{% block body %}
+	<div class="container mt-3">
+		<h1>Profil de
+			{{ profile.username }}</h1>
+		<hr/>
+		{% include 'frontend/profile/_card.html.twig' with { 'profile': profile, 'full': true } %}
+	</div>
+{% endblock %}

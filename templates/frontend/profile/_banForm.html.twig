@@ -1,10 +1,7 @@
-<form method="post"
-      action="{{ path('app.profiles.ban', {'id': profile.id}) }}"
-      onsubmit="return confirm('Voulez-vous vraiment {{ profile.banned ? 'débannir' : 'bannir' }} {{ profile.username }} ?');"
-    >
-    <input type="hidden" name="_method" value="POST">
-    <input type="hidden" name="_token" value="{{ csrf_token('ban' ~ profile.id) }}">
-    <button type="submit" class="btn btn-danger btn-xs">
-        {{ profile.banned ? 'Débannir' : 'Bannir' }}
-    </button>
+<form method="post" action="{{ path('app.profiles.ban', {'id': profile.id}) }}" onsubmit="return confirm('Voulez-vous vraiment {{ profile.banned ? 'débannir' : 'bannir' }} {{ profile.username }} ?');">
+	<input type="hidden" name="_method" value="POST">
+	<input type="hidden" name="_token" value="{{ csrf_token('ban' ~ profile.id) }}">
+	<button type="submit" class="btn {{ profile.banned ? 'btn-warning' : 'btn-danger' }} btn-sm">
+		{{ profile.banned ? 'Débannir' : 'Bannir' }}
+	</button>
 </form>

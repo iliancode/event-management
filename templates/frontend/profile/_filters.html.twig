@@ -1,6 +1,15 @@
-    {{ form_start(filters) }}
-    {{ form_widget(filters) }}
-    <button type="submit" class="btn btn-primary">
-        Rechercher
-    </button>
-    {{ form_end(filters) }}
+{{ form_start(filters, {'method': 'get', 'attr': {'class': 'filter-form'}}) }}
+<div class="row">
+	<div class="col-md-6">
+		{{ form_row(filters.field1) }}
+	</div>
+	<div class="col-md-6">
+		{{ form_row(filters.field2) }}
+	</div>
+</div>
+<div class="row">
+	<div class="col-12">
+		<button type="submit" class="btn btn-primary">Rechercher</button>
+	</div>
+</div>
+{{ form_end(filters) }}

@@ -1,33 +1,33 @@
-<div class="card" style="max-width: 300px">
-    <div class="card-body">
-        {% if full == false %}
-            <a href="{{ path('app.types.show', { 'id': type.id }) }}" class="text-decoration-none">
-                <h5 class="card-title">{{ type.label }}</h5>
-            </a>
-        {% else %}
-            <h5 class="card-title">{{ type.label }}</h5>
-        {% endif %}
+<div class="type-card card">
+	<div class="card-body">
+		{% if full == false %}
+			<a href="{{ path('app.types.show', { 'id': type.id }) }}" class="text-decoration-none">
+				<h5 class="card-title">{{ type.label }}</h5>
+			</a>
+		{% else %}
+			<h5 class="card-title">{{ type.label }}</h5>
+		{% endif %}
 
-        <ul class="list-unstyled mt-3">
-            <li class="mb-2">
-                <i class="bi bi-people-fill"></i> 
-                <span>{{ type.maxParticipants }}</span>
-            </li>
-            <li class="mb-2">
-                <i class="bi bi-calendar-check"></i> 
-                <span>{{ type.createdAt|format_datetime('full', 'short') }}</span>
-            </li>
-            <li class="mb-2">
-                <i class="bi bi-stopwatch"></i> 
-                <span>{{ type.events|length }}</span>
-            </li>
-        </ul>
+		<ul class="list-unstyled mt-3">
+			<li class="mb-2">
+				<i class="bi bi-people-fill"></i>
+				<span>{{ type.maxParticipants }}</span>
+			</li>
+			<li class="mb-2">
+				<i class="bi bi-calendar-check"></i>
+				<span>{{ type.createdAt|format_datetime('full', 'short') }}</span>
+			</li>
+			<li class="mb-2">
+				<i class="bi bi-stopwatch"></i>
+				<span>{{ type.events|length }}</span>
+			</li>
+		</ul>
 
-        <div class="d-flex gap-2 mt-3">
-            <a href="{{ path('app.types.edit', { 'id': type.id }) }}" class="btn">
-                <i class="bi bi-pencil-fill"></i>
-            </a>
-            {% include('backend/type/_deleteForm.html.twig') %}
-        </div>
-    </div>
+		<div class="d-flex gap-2 mt-3">
+			<a href="{{ path('app.types.edit', { 'id': type.id }) }}" class="btn">
+				<i class="bi bi-pencil-fill"></i>
+			</a>
+			{% include('backend/type/_deleteForm.html.twig') %}
+		</div>
+	</div>
 </div>

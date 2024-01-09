@@ -1,34 +1,24 @@
-
 <div class="d-flex gap-2 {{ column ? 'flex-column' : '' }} mt-3">
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-three-dots-vertical cursor-pointer show" ></i>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            {% if full == false %}
-                <li><a class="dropdown-item" href="{{ path('app.profiles.show', { 'id': profile.id }) }}">Détails</a></li>
-            {% endif %}
+	<div class="dropdown">
+		<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+			<i class="bi bi-three-dots-vertical cursor-pointer show"></i>
+		</button>
+		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+			<li>
+				<a class="dropdown-item" href="{{ path('app.profiles.show', { 'id': profile.id }) }}">Détails</a>
+			</li>
+			{% if app.user and (profile == app.user or is_granted('ROLE_ADMIN')) %}
+				<li>
+					<a class="dropdown-item" href="{{ path('app.profiles.edit', { 'id': profile.id }) }}">Modifier</a>
+				</li>
+			{% endif %}
+		</ul>
+	</div>
 
-            {% if app.user and profile == app.user or is_granted('ROLE_ADMIN') %}
-
-                <li><a class="dropdown-item" href="{{ path('app.profiles.edit', { 'id': profile.id }) }}"> Modifier</a></li>
-                {%  if profile.verified == false %}
-                    <li><a class="dropdown-item" href="{{ path('app.profiles.verify.email', { 'id': profile.id }) }}">Envoyer un mail de vérification</a></li>
-                {% endif %}
-                <li><a class="dropdown-item" href="{{ path('app.profiles.edit.email', { 'id': profile.id }) }}">Modifier email</a></li>
-                <li><a class="dropdown-item" href="{{ path('app.profiles.edit.password', { 'id': profile.id }) }}">Modifier mot de passe</a></li>
-
-            {% endif %}
-
-        </ul>
-    </div>
-
-    {% if app.user and profile == app.user or is_granted('ROLE_ADMIN') %}
-
-        {% include('frontend/profile/_deleteForm.html.twig') %}
-        {% if is_granted('ROLE_ADMIN') %}
-            {% include('frontend/profile/_banForm.html.twig') %}
-        {% endif %}
-    {% endif %}
-
+	{% if app.user and (profile == app.user or is_granted('ROLE_ADMIN')) %}
+		{% include 'frontend/profile/_deleteForm.html.twig' %}
+		{% if is_granted('ROLE_ADMIN') %}
+			{% include 'frontend/profile/_banForm.html.twig' %}
+		{% endif %}
+	{% endif %}
 </div>
