@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,10 +24,18 @@ class ProfileFormType extends AbstractType
                 'download_uri' => true,
                 'asset_helper' => true,
             ])
-            ->add('username')
-            ->add('firstname')
-            ->add('lastname')
-            ->add('biography')
+            ->add('username' , null, [
+                'label' => 'Pseudonyme'
+            ])
+            ->add('firstname', null, [
+                'label' => 'Prénom'
+            ])
+            ->add('lastname', null, [
+                'label' => 'Nom'
+            ])
+            ->add('biography' , null, [
+                'label' => 'Biographie'
+            ])
             ->add('roles' , ChoiceType::class, [
                 'choices' => [
                     'User' => 'ROLE_USER',
