@@ -16,7 +16,9 @@ class EventFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
+            ->add('title' , null, [
+                'label' => 'Titre'
+            ])
             ->add('imageFile', VichImageType::class, [
                 'label' => 'Image',
                 'required' => false,
@@ -26,7 +28,9 @@ class EventFormType extends AbstractType
                 'download_uri' => true,
                 'asset_helper' => true,
             ])
-            ->add('description')
+            ->add('description' , null, [
+                'label' => 'Description'
+            ])
             ->add('type', EntityType::class, [
                 'class' => Type::class,
                 'choice_label' => 'label',
@@ -34,10 +38,18 @@ class EventFormType extends AbstractType
             ->add('date', null, [
                 'widget' => 'single_text',
             ])
-            ->add('city')
-            ->add('zipcode')
-            ->add('address')
-            ->add('location')
+            ->add('city' , null, [
+                'label' => 'Ville'
+            ])
+            ->add('zipcode' , null, [
+                'label' => 'Code postal'
+            ])
+            ->add('address' , null, [
+                'label' => 'Adresse'
+            ])
+            ->add('location' , null, [
+                'label' => 'Lieu'
+            ])
         ;
     }
 
