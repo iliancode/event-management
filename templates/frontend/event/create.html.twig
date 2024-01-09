@@ -3,6 +3,8 @@
 {% block title %}Ajouter un event{% endblock %}
 
 {% block body %}
+    <div class="container">
+
     <h1>Ajouter un event</h1>
     <section class="py-3">
         {% include('frontend/event/_form.html.twig') %}
@@ -14,5 +16,7 @@
                 <a class="btn btn-secondary" href="{{ path('app.events') }}">Retour à la liste</a>
             </div>
         </div>
-    <section class="py-3">
+    </section>
+    </div>
+
 {% endblock %}

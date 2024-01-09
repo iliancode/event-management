@@ -13,9 +13,9 @@ class TypeFormType extends AbstractType
     {
         $builder
             ->add('label' , null, [
-                'label' => 'Nom de la type',
+                'label' => 'Nom du type',
                 'attr' => [
-                    'placeholder' => 'Nom de la type'
+                    'placeholder' => 'Nom du type'
                 ]
             ])
             ->add('maxParticipants' , null, [
