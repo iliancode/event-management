@@ -8,7 +8,9 @@
         <img src="{{ asset('build/images/bg-home.png') }}" class="img-fluid" style="width: 100%"/>
     </div>
     <div class="container mt-4">
+        {% if events %}
         <h3>Les événements qui pourraient vous intéresser :</h3>
+        {% endif %}
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 mb-4 mt-2">
             {% for event in events %}
                 <div class="col">
