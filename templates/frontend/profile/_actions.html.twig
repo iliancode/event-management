@@ -1,25 +1,31 @@
 <div class="d-flex gap-2 {{ column ? 'flex-column' : '' }} mt-3">
-	{% if app.user and (profile == app.user or is_granted('ROLE_ADMIN')) %}
-		<form method="post" action="{{ path('app.profiles.edit', {'id': profile.id}) }}">
-			<button type="submit" class="btn btn-secondary">
-				<i class="bi bi-pencil-square"></i>
-			</button>
-		</form>
+    {% if app.user and (profile == app.user or is_granted('ROLE_ADMIN')) %}
+        <!-- Edit Profile Button -->
+        <form method="post" action="{{ path('app.profiles.edit', {'id': profile.id}) }}">
+            <button type="submit" class="btn btn-secondary d-flex align-items-center">
+                <i class="bi bi-pencil-square"></i>
+            </button>
+        </form>
 
-		<form method="post" action="{{ path('app.profiles.delete', {'id': profile.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cette type ?');">
-			<input type="hidden" name="_method" value="DELETE">
-			<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ profile.id) }}">
-			<button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-		</form>
+        <!-- Delete Profile Button -->
+        <form method="post" action="{{ path('app.profiles.delete', {'id': profile.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cette type ?');">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ profile.id) }}">
+            <button type="submit" class="btn btn-danger btn-sm d-flex align-items-center">
+                <i class="bi bi-trash-fill"></i>
+            </button>
+        </form>
 
-		{% if is_granted('ROLE_ADMIN') %}
-			<form method="post" action="{{ path('app.profiles.ban', {'id': profile.id}) }}" onsubmit="return confirm('Voulez-vous vraiment {{ profile.banned ? 'débannir' : 'bannir' }} {{ profile.username }} ?');">
-				<input type="hidden" name="_method" value="POST">
-				<input type="hidden" name="_token" value="{{ csrf_token('ban' ~ profile.id) }}">
-				<button type="submit" class="btn {{ profile.banned ? 'btn-warning' : 'btn-danger' }} btn-sm">
-					{{ profile.banned ? 'Débannir' : 'Bannir' }}
-				</button>
-			</form>
-		{% endif %}
-	{% endif %}
+        {% if is_granted('ROLE_ADMIN') %}
+            <!-- Ban/Unban Profile Button -->
+            <form method="post" action="{{ path('app.profiles.ban', {'id': profile.id}) }}" onsubmit="return confirm('Voulez-vous vraiment {{ profile.banned ? 'débannir' : 'bannir' }} {{ profile.username }} ?');">
+                <input type="hidden" name="_method" value="POST">
+                <input type="hidden" name="_token" value="{{ csrf_token('ban' ~ profile.id) }}">
+                <button type="submit" class="btn {{ profile.banned ? 'btn-warning' : 'btn-danger' }} btn-sm d-flex align-items-center">
+                    <i class="bi bi-ban-fill"></i>
+                    <span class="ms-2">{{ profile.banned ? 'Débannir' : 'Bannir' }}</span>
+                </button>
+            </form>
+        {% endif %}
+    {% endif %}
 </div>
