@@ -34,12 +34,6 @@
 			{{ event.nbRealParticipants | length }}/{{ event.getMaxParticipants }}
 		</p>
 		<div class="d-flex gap-2">
-			{% if app.user and (event.organizer == app.user or is_granted('ROLE_ADMIN')) %}
-				<a href="{{ path('app.events.edit', { 'id': event.id }) }}" class="btn btn-warning">
-					<i class="bi bi-pencil-fill"></i>
-				</a>
-				{% include 'frontend/event/_deleteForm.html.twig' %}
-			{% endif %}
 			{% if app.user and not event.isPassed and not event.maxParticipantsReached() and (event.organizer == app.user or is_granted('ROLE_ADMIN')) %}
 				<a class="btn btn-secondary" href="{{ path('app.events.add', { 'id': event.id }) }}">Ajouter un participant non inscrit</a>
 			{% endif %}
