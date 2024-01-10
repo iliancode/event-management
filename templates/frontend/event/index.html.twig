@@ -4,21 +4,15 @@
 {% endblock %}
 
 {% block body %}
-	<div class="container">
-		<h1>Les events ({{ events.totalItemCount }})</h1>
-
-		{% if is_granted('ROLE_EDITOR') %}
-			<section class="py-3">
-				<div class="row">
-					<div class="col d-flex justify-content-between align-items-center">
-						<a class="btn btn-secondary" href="{{ path('app.events.create') }}">Ajouter un événement</a>
-						<button type="button" class="btn btn-custom-filter" data-bs-toggle="modal" data-bs-target="#exampleModal">
-							<i class="bi bi-funnel-fill"></i>
-						</button>
-					</div>
-				</div>
-			</section>
-		{% endif %}
+	<div class="container mt-3">
+		<h1>Les événements ({{ events.totalItemCount }})</h1>
+		<hr/>
+		<div class="d-flex justify-content-between align-items-center mb-3">
+			<a class="btn btn-secondary" href="{{ path('app.events.create') }}">Ajouter un événement</a>
+			<button type="button" class="btn btn-custom-filter" data-bs-toggle="modal" data-bs-target="#exampleModal">
+				<i class="bi bi-funnel-fill"></i>
+			</button>
+		</div>
 
 		<section class="py-3">
 			{% include 'frontend/event/_list.html.twig' with { 'events': events } %}
