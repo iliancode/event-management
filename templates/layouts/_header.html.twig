@@ -1,61 +1,58 @@
 <header class="shadow">
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="{{ path('app.home') }}">LOF</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav gap-2">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app.profiles') }}">Utilisateurs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app.events') }}">Événements</a>
-                    </li>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app.types') }}">Types</a>
-                        </li>
-                    {% endif %}
-                </ul>
-                <ul class="navbar-nav ms-auto gap-2">
-                    {% if app.user %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                               aria-expanded="false">
-                                {{ app.user.username }}
-                                {% if app.user.imageName %}
-                                    <img src="{{ vich_uploader_asset(app.user) }}" alt="profile"
-                                         class="rounded-circle" width="40" height="40">
-                                {% else %}
-                                    <img src="{{ asset('images/users/default.png') }}" alt="profile"
-                                         class="rounded-circle" width="40" height="40">
-                                {% endif %}
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="{{ path('app.profiles.show', {id: app.user.id}) }}">Mon
-                                        profil</a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="{{ path('app.logout') }}">Se déconnecter</a></li>
-                            </ul>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="btn btn-light" href="{{ path('app.login') }}">Se connecter</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-primary" href="{{ path('app.register') }}">S'inscrire</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    </nav>
+	<nav class="navbar navbar-expand-lg">
+		<div class="container">
+			<a class="navbar-brand" href="{{ path('app.home') }}">LOF</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav gap-2">
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('app.events') }}">Match</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('app.profiles') }}">Joueurs</a>
+					</li>
+					{% if is_granted('ROLE_ADMIN') %}
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app.types') }}">Types</a>
+						</li>
+					{% endif %}
+				</ul>
+				<ul class="navbar-nav ms-auto gap-2">
+					{% if app.user %}
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								{{ app.user.username }}
+								{% if app.user.imageName %}
+									<img src="{{ vich_uploader_asset(app.user) }}" alt="profile" class="rounded-circle" width="40" height="40">
+								{% else %}
+									<img src="{{ asset('images/users/default.png') }}" alt="profile" class="rounded-circle" width="40" height="40">
+								{% endif %}
+							</a>
+							<ul class="dropdown-menu">
+								<li>
+									<a class="dropdown-item" href="{{ path('app.profiles.show', {id: app.user.id}) }}">Mon
+										                                        profil</a>
+								</li>
+								<li>
+									<hr class="dropdown-divider">
+								</li>
+								<li>
+									<a class="dropdown-item" href="{{ path('app.logout') }}">Se déconnecter</a>
+								</li>
+							</ul>
+						</li>
+					{% else %}
+						<li class="nav-item">
+							<a class="btn btn-light" href="{{ path('app.login') }}">Se connecter</a>
+						</li>
+						<li class="nav-item">
+							<a class="btn btn-primary" href="{{ path('app.register') }}">S'inscrire</a>
+						</li>
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+	</nav>
 </header>
