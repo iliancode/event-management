@@ -8,7 +8,9 @@
 		<h1>Les événements ({{ events.totalItemCount }})</h1>
 		<hr/>
 		<div class="d-flex justify-content-between align-items-center mb-3">
-			<a class="btn btn-secondary" href="{{ path('app.events.create') }}">Ajouter un événement</a>
+			{% if is_granted('ROLE_EDITOR') %}
+				<a class="btn btn-secondary" href="{{ path('app.events.create') }}">Ajouter un événement</a>
+			{% endif %}
 			<button type="button" class="btn btn-custom-filter" data-bs-toggle="modal" data-bs-target="#modalFiltersEvent">
 				<i class="bi bi-funnel-fill"></i>
 			</button>

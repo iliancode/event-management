@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/events')]
 class EventController extends AbstractController
@@ -41,9 +42,22 @@ class EventController extends AbstractController
         }
     }
 
+    private function checkEventUpdatingRights(?Event $event, ?User $user): void
+    {
+        if (!$this->isGranted('ROLE_ADMIN') && $event->getOrganizer() !== $user) {
+            $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas les droits pour modifier cet évènement');
+            throw $this->createAccessDeniedException('Vous n\'avez pas les droits pour modifier cet évènement');
+        }
+    }
+
     private function isUserInEvent(Event $event, ?User $user): bool
     {
         return $this->eventParticipationRepository->findOneBy(['event' => $event, 'user' => $user]) instanceof EventParticipation;
+    }
+
+    private function  isUserBannedFromEvent(Event $event, ?User $user): bool
+    {
+        return $this->eventParticipationRepository->findOneBy(['event' => $event, 'user' => $user, 'banned' => true]) instanceof EventParticipation;
     }
 
     private function addUserToEvent(Event $event, ?User $user = null): void
@@ -122,6 +136,7 @@ class EventController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_EDITOR')]
     #[Route('/create', name: RouteConstants::ROUTE_EVENTS_CREATE, methods: ['GET', 'POST'])]
     public function create(Request $request): Response|RedirectResponse
     {
@@ -160,6 +175,7 @@ class EventController extends AbstractController
     public function edit(Request $request, ?Event $event): Response|RedirectResponse
     {
         $this->checkEvent($event);
+        $this->checkEventUpdatingRights($event, $this->getUser());
 
         $form = $this->createForm(EventFormType::class, $event);
         $form->handleRequest($request);
@@ -184,6 +200,7 @@ class EventController extends AbstractController
     public function delete(Request $request, ?Event $event): Response|RedirectResponse
     {
         $this->checkEvent($event);
+        $this->checkEventUpdatingRights($event, $this->getUser());
 
         if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->request->get('_token'))) {
             $this->em->remove($event);
@@ -196,10 +213,12 @@ class EventController extends AbstractController
         return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS);
     }
 
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/{id}/add', name: RouteConstants::ROUTE_EVENTS_ADD, methods: ['GET', 'POST'])]
     public function add(Request $request, ?Event $event): Response|RedirectResponse
     {
         $this->checkEvent($event);
+        $this->checkEventUpdatingRights($event, $this->getUser());
 
         $form = $this->createForm(EventParticipationFormType::class);
         $form->handleRequest($request);
@@ -234,6 +253,10 @@ class EventController extends AbstractController
         if ($this->isCsrfTokenValid('join' . $event->getId(), $request->request->get('_token'))) {
             if ($this->isUserInEvent($event, $this->getUser())) {
                 $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous avez déjà rejoint l\'évènement');
+                return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $event->getId()]);
+            }
+            if ($this->isUserBannedFromEvent($event, $this->getUser())) {
+                $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous avez été banni de l\'évènement');
                 return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $event->getId()]);
             }
             if ($event->isMaxParticipantsReached()) {

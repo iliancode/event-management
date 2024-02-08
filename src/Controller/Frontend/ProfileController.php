@@ -42,6 +42,14 @@ class ProfileController extends AbstractController
         }
     }
 
+    private function checkUserUpdatingRights(User $profile): void
+    {
+        if (!$this->isGranted('ROLE_ADMIN') && $profile !== $this->getUser()) {
+            $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas les droits pour modifier ce profile');
+            throw $this->createNotFoundException('Vous n\'avez pas les droits pour modifier ce profile');
+        }
+    }
+
     #[Route('', name: RouteConstants::ROUTE_PROFILES, methods: ['GET'])]
     public function index(Request $request): Response
     {
@@ -91,6 +99,7 @@ class ProfileController extends AbstractController
     public function edit(Request $request, ?User $profile): Response|RedirectResponse
     {
         $this->checkUser($profile);
+        $this->checkUserUpdatingRights($profile);
 
         $form = $this->createForm(ProfileFormType::class, $profile);
         $form->handleRequest($request);
@@ -119,6 +128,7 @@ class ProfileController extends AbstractController
     public function editEmail(Request $request, ?User $profile): Response|RedirectResponse
     {
         $this->checkUser($profile);
+        $this->checkUserUpdatingRights($profile);
 
         $form = $this->createForm(ProfileEmailFormType::class, $profile);
         $form->handleRequest($request);
@@ -153,6 +163,7 @@ class ProfileController extends AbstractController
     public function editPassword(Request $request, ?User $profile, UserPasswordHasherInterface $userPasswordHasher): Response|RedirectResponse
     {
         $this->checkUser($profile);
+        $this->checkUserUpdatingRights($profile);
 
         $form = $this->createForm(ProfilePasswordFormType::class, $profile);
         $form->handleRequest($request);
@@ -189,6 +200,7 @@ class ProfileController extends AbstractController
     public function verifyEmail(Request $request, ?User $profile): Response|RedirectResponse
     {
         $this->checkUser($profile);
+        $this->checkUserUpdatingRights($profile);
 
         $this->securityUtils->sendEmailConfirmation($profile);
 
@@ -201,6 +213,7 @@ class ProfileController extends AbstractController
     public function delete(Request $request, ?User $profile): Response|RedirectResponse
     {
         $this->checkUser($profile);
+        $this->checkUserUpdatingRights($profile);
 
         if ($this->isCsrfTokenValid('delete' . $profile->getId(), $request->request->get('_token'))) {
             $this->em->remove($profile);

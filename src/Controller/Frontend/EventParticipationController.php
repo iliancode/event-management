@@ -33,10 +33,19 @@ class EventParticipationController extends AbstractController
         }
     }
 
+    private function checkEventParticipationUpdatingRights(EventParticipation $eventParticipation, ?User $user): void
+    {
+        if (!$this->isGranted('ROLE_ADMIN') && $eventParticipation->getUser() !== $user) {
+            $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas les droits pour modifier ce eventParticipation');
+            throw $this->createNotFoundException('Vous n\'avez pas les droits pour modifier ce eventParticipation');
+        }
+    }
+
     #[Route('/{id}/edit', name: RouteConstants::ROUTE_EVENT_PARTICIPATIONS_EDIT, methods: ['GET', 'POST'])]
     public function edit(Request $request, ?EventParticipation $eventParticipation): Response|RedirectResponse
     {
         $this->checkEventParticipation($eventParticipation);
+        $this->checkEventParticipationUpdatingRights($eventParticipation, $this->getUser());
 
         $form = $this->createForm(EventParticipationFormType::class, $eventParticipation);
         $form->handleRequest($request);
@@ -61,6 +70,7 @@ class EventParticipationController extends AbstractController
     public function delete(Request $request, ?EventParticipation $eventParticipation): Response|RedirectResponse
     {
         $this->checkEventParticipation($eventParticipation);
+        $this->checkEventParticipationUpdatingRights($eventParticipation, $this->getUser());
 
         if ($this->isCsrfTokenValid('delete' . $eventParticipation->getId(), $request->request->get('_token'))) {
             $this->em->remove($eventParticipation);
@@ -77,6 +87,8 @@ class EventParticipationController extends AbstractController
     public function ban(Request $request, ?EventParticipation $eventParticipation): Response|RedirectResponse
     {
         $this->checkEventParticipation($eventParticipation);
+        $this->checkEventParticipationUpdatingRights($eventParticipation, $this->getUser());
+
         $banned = $eventParticipation->isBanned();
         $eventParticipation->setBanned(!$banned);
         $this->em->flush();
