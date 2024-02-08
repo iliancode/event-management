@@ -47,7 +47,7 @@
 		{% if app.user %}
 			<div class="mt-3">
 				{% if event.isBannedFromEvent(app.user) %}
-					<p class="text-danger">Vous avez été banni de cet match</p>
+					<p class="text-danger">Vous avez été banni de ce match</p>
 				{% else %}
 					{% if event.inEvent(app.user) %}
 						{% include 'frontend/event/_leaveForm.html.twig' %}
