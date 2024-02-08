@@ -27,9 +27,9 @@
 				{% endif %}
 			</div>
 		</div>
-		<p class="card-text mb-1">Rôles :
-			{{ profile.roles | join(', ') | replace({'ROLE_': ''}) }}</p>
 		{% if app.user == profile or is_granted('ROLE_ADMIN') %}
+			<p class="card-text mb-1">Rôles :
+				{{ profile.roles | join(', ') | replace({'ROLE_': ''}) }}</p>
 			<p class="card-text mb-1">Email :
 				{{ profile.email }}</p>
 		{% endif %}
