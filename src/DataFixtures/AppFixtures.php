@@ -67,27 +67,36 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         // make admin
-        $user = $this->makeUser('admin@esig.fr', 'admin', [UserConstants::ROLE_ADMIN, UserConstants::ROLE_EDITOR, UserConstants::ROLE_USER], 'admin', 'Admin', 'ADIMN', 'admin');
+        $user = $this->makeUser('admin@esgi.fr', 'admin', [UserConstants::ROLE_ADMIN, UserConstants::ROLE_EDITOR, UserConstants::ROLE_USER], 'admin', 'Admin', 'ADIMN', 'admin');
         $manager->persist($user);
         $manager->flush();
 
         // make 5 editor
         for ($i = 0; $i < 5; $i++) {
-            $user = $this->makeUser('editor' . $i . '@esig.fr', 'editor' . $i, [UserConstants::ROLE_EDITOR, UserConstants::ROLE_USER], 'editor' . $i, 'Editor' . $i, 'EDITOR' . $i, 'editor' . $i);
+            $user = $this->makeUser('editor' . $i . '@esgi.fr', 'editor' . $i, [UserConstants::ROLE_EDITOR, UserConstants::ROLE_USER], 'editor' . $i, 'Editor' . $i, 'EDITOR' . $i, 'editor' . $i);
             $manager->persist($user);
             $manager->flush();
         }
 
         // make 20 user
         for ($i = 0; $i < 20; $i++) {
-            $user = $this->makeUser('user' . $i . '@esig.fr', 'user' . $i, [UserConstants::ROLE_USER], 'user' . $i, 'User' . $i, 'USER' . $i, 'user' . $i);
+            $user = $this->makeUser('user' . $i . '@esgi.fr', 'user' . $i, [UserConstants::ROLE_USER], 'user' . $i, 'User' . $i, 'USER' . $i, 'user' . $i);
             $manager->persist($user);
             $manager->flush();
         }
 
-        // make 20 types
-        for ($i = 0; $i < 20; $i++) {
-            $type = $this->makeType('type' . $i, random_int(1, 20));
+        $types = [
+            ["Football à 11", 11],
+            ["Football à 7", 7],
+            ["Football à 5", 5],
+            ["Futsal", 5],
+            ["Tournoi classique", 44],
+            ["Tournoi interentreprise", 44]
+        ];
+
+        // make each type of array $types
+        for ($i = 0; $i < count($types); $i++) {
+            $type = $this->makeType($types[$i][0], $types[$i][1]);
             $manager->persist($type);
             $manager->flush();
         }
