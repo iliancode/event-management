@@ -14,11 +14,11 @@ class TypeFilterFormType extends AbstractType
     {
         $builder
             ->add('search', SearchType::class, [
-                'label' => false,
                 'attr' => [
                     'placeholder' => 'Rechercher'
                 ],
-                'required' => false
+                'required' => false,
+                'label' => 'Rechercher'
             ])
             ->add('order', ChoiceType::class, [
                 'choices' => [
@@ -29,6 +29,7 @@ class TypeFilterFormType extends AbstractType
                 'expanded' => false,
                 'multiple' => false,
                 'required' => false,
+                'label' => 'Trier par'
             ])
             ->add('direction', ChoiceType::class, [
                 'choices' => [
@@ -37,7 +38,8 @@ class TypeFilterFormType extends AbstractType
                 ],
                 'expanded' => false,
                 'multiple' => false,
-                'required' => false
+                'required' => false,
+                'label' => 'Direction'
             ])
             ->setMethod('GET')
         ;

@@ -8,14 +8,14 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav gap-2">
 					<li class="nav-item">
-						<a class="nav-link" href="{{ path('app.events') }}">Matchs</a>
+						<a class="nav-link" href="{{ path('app.events') }}">MATCHS</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ path('app.profiles') }}">Joueurs</a>
+						<a class="nav-link" href="{{ path('app.profiles') }}">JOUEURS</a>
 					</li>
 					{% if is_granted('ROLE_ADMIN') %}
 						<li class="nav-item">
-							<a class="nav-link" href="{{ path('app.types') }}">Types</a>
+							<a class="nav-link" href="{{ path('app.types') }}">TYPES</a>
 						</li>
 					{% endif %}
 				</ul>

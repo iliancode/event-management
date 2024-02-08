@@ -9,7 +9,6 @@
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><text y='1.2em' font-size='96'>⚫️</text></svg>">
 		{% block stylesheets %}
 			{{ encore_entry_link_tags('app') }}
-			<link rel="stylesheet" href="{{ asset('css/style.css') }}">
 		{% endblock %}
 		{% block javascripts %}
 			{{ encore_entry_script_tags('app') }}
@@ -26,7 +25,7 @@
 			{% include 'layouts/_toasts.html.twig' %}
 		</aside>
 		{% block footer %}
-			<footer class="footer mt-auto py-3 bg-light">
+			<footer class="footer mt-auto bg-light">
 				{% include 'layouts/_footer.html.twig' %}
 			</footer>
 		{% endblock %}

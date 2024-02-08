@@ -25,7 +25,7 @@ class EventFilterFormType extends AbstractType
     {
         $builder
             ->add('search', SearchType::class, [
-                'label' => false,
+                'label' => 'Rechercher',
                 'attr' => [
                     'placeholder' => 'Rechercher'
                 ],
@@ -36,7 +36,8 @@ class EventFilterFormType extends AbstractType
                 'choice_label' => fn($choice) => $choice,
                 'group_by' => fn($choice) => mb_substr($choice, 0, 1),
                 'multiple' => true,
-                'autocomplete' => true
+                'autocomplete' => true,
+                'label' => 'Villes'
             ])
             ->add('types', EntityType::class, [
                 'class' => Type::class,
@@ -52,7 +53,8 @@ class EventFilterFormType extends AbstractType
                 ],
                 'expanded' => true,
                 'multiple' => true,
-                'required' => false
+                'required' => false,
+                'label' => 'Etat'
             ])
             ->add('dateStart', DateType::class, [
                 'label' => 'Après le',
@@ -71,7 +73,8 @@ class EventFilterFormType extends AbstractType
                 ],
                 'expanded' => true,
                 'multiple' => true,
-                'required' => false
+                'required' => false,
+                'label' => 'Places'
             ])
             ->add('order', ChoiceType::class, [
                 'choices' => [
@@ -82,6 +85,7 @@ class EventFilterFormType extends AbstractType
                 'expanded' => false,
                 'multiple' => false,
                 'required' => false,
+                'label' => 'Trier par'
             ])
             ->add('direction', ChoiceType::class, [
                 'choices' => [
@@ -90,7 +94,8 @@ class EventFilterFormType extends AbstractType
                 ],
                 'expanded' => false,
                 'multiple' => false,
-                'required' => false
+                'required' => false,
+                'label' => 'Direction'
             ])
             ->setMethod('GET')
         ;

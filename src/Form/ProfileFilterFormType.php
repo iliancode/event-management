@@ -17,7 +17,8 @@ class ProfileFilterFormType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Rechercher'
                 ],
-                'required' => false
+                'required' => false,
+                'label' => 'Rechercher'
             ])
             ->add('roles', ChoiceType::class, [
                 'choices' => [
@@ -27,7 +28,8 @@ class ProfileFilterFormType extends AbstractType
                 ],
                 'expanded' => true,
                 'multiple' => true,
-                'required' => false
+                'required' => false,
+                'label' => 'Rôles'
             ])
             ->add('verified', ChoiceType::class, [
                 'choices' => [
@@ -36,7 +38,8 @@ class ProfileFilterFormType extends AbstractType
                 ],
                 'expanded' => true,
                 'multiple' => true,
-                'required' => false
+                'required' => false,
+                'label' => 'Vérifié'
             ])
             ->add('banned', ChoiceType::class, [
                 'choices' => [
@@ -45,7 +48,8 @@ class ProfileFilterFormType extends AbstractType
                 ],
                 'expanded' => true,
                 'multiple' => true,
-                'required' => false
+                'required' => false,
+                'label' => 'Banni'
             ])
             ->add('order', ChoiceType::class, [
                 'choices' => [
@@ -58,6 +62,7 @@ class ProfileFilterFormType extends AbstractType
                 'expanded' => false,
                 'multiple' => false,
                 'required' => false,
+                'label' => 'Trier par'
             ])
             ->add('direction', ChoiceType::class, [
                 'choices' => [
@@ -66,7 +71,8 @@ class ProfileFilterFormType extends AbstractType
                 ],
                 'expanded' => false,
                 'multiple' => false,
-                'required' => false
+                'required' => false,
+                'label' => 'Direction'
             ])
             ->setMethod('GET')
         ;

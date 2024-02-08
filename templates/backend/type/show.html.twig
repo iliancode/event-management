@@ -3,6 +3,8 @@
 {% block title %}{{ type.label }}{% endblock %}
 
 {% block body %}
-    {% include 'backend/type/_card.html.twig' with { type: type, full: true } %}
+    <div class="container mt-3">
+        {% include 'backend/type/_card.html.twig' with { type: type, full: true } %}
+    </div>
 {% endblock %}
 
