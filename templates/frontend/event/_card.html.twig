@@ -31,7 +31,7 @@
 		</p>
 		<p class="card-text">
 			<i class="bi bi-people-fill"></i>
-			{{ event.nbRealParticipants | length }}/{{ event.getMaxParticipants }}
+			{{ event.nbRealParticipants }}/{{ event.getMaxParticipants }}
 		</p>
 		<div class="d-flex gap-2">
 			{% if '/events/' in app.request.uri and app.user and (event.organizer == app.user or is_granted('ROLE_ADMIN')) %}
