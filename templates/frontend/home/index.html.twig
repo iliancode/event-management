@@ -9,7 +9,7 @@
     </div>
     <div class="container mt-4">
         {% if events %}
-        <h3>Les événements qui pourraient vous intéresser :</h3>
+        <h3>Les matchs qui pourraient vous intéresser :</h3>
         {% endif %}
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 mb-4 mt-2">
             {% for event in events %}
@@ -27,7 +27,7 @@
                     </div>
                 </div>
             {% else %}
-                <p>Aucun événement à venir.</p>
+                <p>Aucun match à venir.</p>
             {% endfor %}
         </div>
     </div>

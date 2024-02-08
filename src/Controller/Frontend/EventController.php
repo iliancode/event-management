@@ -37,16 +37,16 @@ class EventController extends AbstractController
     private function checkEvent(?Event $event): void
     {
         if (!$event instanceof Event) {
-            $this->addFlash(ToastConstants::TOAST_ERROR, 'Le event n\'existe pas');
-            throw $this->createNotFoundException('Le event n\'existe pas');
+            $this->addFlash(ToastConstants::TOAST_ERROR, 'Le match n\'existe pas');
+            throw $this->createNotFoundException('Le match n\'existe pas');
         }
     }
 
     private function checkEventUpdatingRights(?Event $event, ?User $user): void
     {
         if (!$this->isGranted('ROLE_ADMIN') && $event->getOrganizer() !== $user) {
-            $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas les droits pour modifier cet évènement');
-            throw $this->createAccessDeniedException('Vous n\'avez pas les droits pour modifier cet évènement');
+            $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas les droits pour modifier ce match');
+            throw $this->createAccessDeniedException('Vous n\'avez pas les droits pour modifier ce match');
         }
     }
 
@@ -152,7 +152,7 @@ class EventController extends AbstractController
             $this->em->persist($event);
             $this->em->flush();
 
-            $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le event a bien été créée');
+            $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le match a bien été créée');
 
             return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS);
         }
@@ -183,11 +183,11 @@ class EventController extends AbstractController
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 $this->em->flush();
-                $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le event a bien été modifiée');
+                $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le match a bien été modifiée');
 
                 return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS);
             }
-            $this->addFlash(ToastConstants::TOAST_ERROR, 'Le event n\'a pas pu être modifiée');
+            $this->addFlash(ToastConstants::TOAST_ERROR, 'Le match n\'a pas pu être modifiée');
         }
 
         return $this->render('frontend/event/edit.html.twig', [
@@ -205,9 +205,9 @@ class EventController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->request->get('_token'))) {
             $this->em->remove($event);
             $this->em->flush();
-            $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le event a bien été supprimée');
+            $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le match a bien été supprimée');
         } else {
-            $this->addFlash(ToastConstants::TOAST_ERROR, 'Le event n\'a pas pu être supprimée');
+            $this->addFlash(ToastConstants::TOAST_ERROR, 'Le match n\'a pas pu être supprimée');
         }
 
         return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS);
@@ -252,11 +252,11 @@ class EventController extends AbstractController
 
         if ($this->isCsrfTokenValid('join' . $event->getId(), $request->request->get('_token'))) {
             if ($this->isUserInEvent($event, $this->getUser())) {
-                $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous avez déjà rejoint l\'évènement');
+                $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous avez déjà rejoint le match');
                 return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $event->getId()]);
             }
             if ($this->isUserBannedFromEvent($event, $this->getUser())) {
-                $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous avez été banni de l\'évènement');
+                $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous avez été banni de le match');
                 return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $event->getId()]);
             }
             if ($event->isMaxParticipantsReached()) {
@@ -266,9 +266,9 @@ class EventController extends AbstractController
             $this->addUserToEvent($event, $this->getUser());
             $this->em->flush();
 
-            $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Vous avez bien rejoint l\'évènement');
+            $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Vous avez bien rejoint le match');
         } else {
-            $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas pu rejoindre l\'évènement');
+            $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas pu rejoindre le match');
         }
 
         return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $event->getId()]);
@@ -281,16 +281,16 @@ class EventController extends AbstractController
 
         if ($this->isCsrfTokenValid('leave' . $event->getId(), $request->request->get('_token'))) {
             if (!$this->isUserInEvent($event, $this->getUser())) {
-                $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas rejoint l\'évènement');
+                $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas rejoint le match');
                 return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $event->getId()]);
             }
             $eventParticipation = $this->eventParticipationRepository->findOneBy(['event' => $event, 'user' => $this->getUser()]);
             $event->removeEventParticipation($eventParticipation);
             $this->em->remove($eventParticipation);
             $this->em->flush();
-            $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Vous avez bien quitté l\'évènement');
+            $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Vous avez bien quitté le match');
         } else {
-            $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas pu quitter l\'évènement');
+            $this->addFlash(ToastConstants::TOAST_ERROR, 'Vous n\'avez pas pu quitter le match');
         }
 
         return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $event->getId()]);

@@ -28,8 +28,8 @@ class EventParticipationController extends AbstractController
     private function checkEventParticipation(?EventParticipation $eventParticipation): void
     {
         if (!$eventParticipation instanceof EventParticipation) {
-            $this->addFlash(ToastConstants::TOAST_ERROR, 'Le eventParticipation n\'existe pas');
-            throw $this->createNotFoundException('Le eventParticipation n\'existe pas');
+            $this->addFlash(ToastConstants::TOAST_ERROR, 'La participation n\'existe pas');
+            throw $this->createNotFoundException('La participation n\'existe pas');
         }
     }
 
@@ -53,11 +53,11 @@ class EventParticipationController extends AbstractController
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 $this->em->flush();
-                $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le eventParticipation a bien été modifiée');
+                $this->addFlash(ToastConstants::TOAST_SUCCESS, 'La participation a bien été modifiée');
 
                 return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $eventParticipation->getEvent()->getId()]);
             }
-            $this->addFlash(ToastConstants::TOAST_ERROR, 'Le eventParticipation n\'a pas pu être modifiée');
+            $this->addFlash(ToastConstants::TOAST_ERROR, 'La participation n\'a pas pu être modifiée');
         }
 
         return $this->render('frontend/event_participation/edit.html.twig', [
@@ -75,9 +75,9 @@ class EventParticipationController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $eventParticipation->getId(), $request->request->get('_token'))) {
             $this->em->remove($eventParticipation);
             $this->em->flush();
-            $this->addFlash(ToastConstants::TOAST_SUCCESS, 'Le eventParticipation a bien été supprimée');
+            $this->addFlash(ToastConstants::TOAST_SUCCESS, 'La participation a bien été supprimée');
         } else {
-            $this->addFlash(ToastConstants::TOAST_ERROR, 'Le eventParticipation n\'a pas pu être supprimée');
+            $this->addFlash(ToastConstants::TOAST_ERROR, 'La participation n\'a pas pu être supprimée');
         }
 
         return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $eventParticipation->getEvent()->getId()]);
@@ -92,7 +92,7 @@ class EventParticipationController extends AbstractController
         $banned = $eventParticipation->isBanned();
         $eventParticipation->setBanned(!$banned);
         $this->em->flush();
-        $message = $banned ? 'Le eventParticipation a bien été débanni' : 'Le eventParticipation a bien été banni';
+        $message = $banned ? 'La participation a bien été débanni' : 'La participation a bien été banni';
         $this->addFlash(ToastConstants::TOAST_SUCCESS, $message);
 
         return $this->redirectToRoute(RouteConstants::ROUTE_EVENTS_SHOW, ['id' => $eventParticipation->getEvent()->getId()]);

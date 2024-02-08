@@ -46,16 +46,16 @@
                 </div>
             {% endif %}
             {% if  event.isBannedFromEvent(app.user) %}
-                <p class="text-danger">Vous avez été banni de cet événement</p>
+                <p class="text-danger">Vous avez été banni de cet match</p>
             {% endif %}
         {% endif %}
         {% if event.maxParticipantsReached() %}
-            <p class="text-danger">Cet événement est complet</p>
+            <p class="text-danger">Ce match est complet</p>
         {% elseif event.isPassed == false %}
             <p class="text-success">Il reste {{ event.getRemainingPlaces }} places</p>
         {% endif %}
         {% if event.isPassed %}
-            <p class="text-danger">Cet événement est passé</p>
+            <p class="text-danger">Ce match est passé</p>
         {% endif %}
     </div>
 </div>
