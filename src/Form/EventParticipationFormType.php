@@ -15,7 +15,9 @@ class EventParticipationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('fullname')
+            ->add('fullname', null, [
+                'label' => 'Nom complet',
+            ])
         ;
     }
 

@@ -6,6 +6,9 @@
             {% else %}
                 {{ eventParticipation.fullname }}
             {% endif %}
+            {% if eventParticipation.banned %}
+                <span class="text-danger">(Banni)</span>
+            {% endif %}
         </h5>
         <div class="d-flex gap-2">
             {% if app.user == eventParticipation.event.organizer or is_granted('ROLE_ADMIN') %}
