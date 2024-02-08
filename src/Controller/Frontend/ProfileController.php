@@ -102,6 +102,9 @@ class ProfileController extends AbstractController
         $this->checkUserUpdatingRights($profile);
 
         $form = $this->createForm(ProfileFormType::class, $profile);
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $form->remove('roles');
+        }
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
