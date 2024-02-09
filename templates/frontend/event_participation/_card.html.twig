@@ -12,8 +12,10 @@
         </h5>
         <div class="d-flex gap-2">
             {% if app.user == eventParticipation.event.organizer or is_granted('ROLE_ADMIN') %}
-                {%  if eventParticipation.user != null %}
-                    {% include('frontend/event_participation/_banForm.html.twig') %}
+                {%  if app.user != eventParticipation.user %}
+                    {%  if eventParticipation.user != null %}
+                        {% include('frontend/event_participation/_banForm.html.twig') %}
+                    {% endif %}
                 {% endif %}
                 {% if eventParticipation.fullname != null %}
                     <a href="{{ path('app.event_participation.edit', { 'id': eventParticipation.id }) }}" class="btn btn-primary">Edit</a>
