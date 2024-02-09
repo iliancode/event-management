@@ -39,7 +39,7 @@ class ProfileFormType extends AbstractType
             ->add('roles' , ChoiceType::class, [
                 'choices' => [
                     'User' => 'ROLE_USER',
-                    'Editeur' => 'ROLE_EDITEUR',
+                    'Editeur' => 'ROLE_EDITOR',
                     'Admin' => 'ROLE_ADMIN',
                 ],
                 'expanded' => true,
